@@ -416,3 +416,9 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Ignore all CSVs in interim
+data/interim/*.csv
+
+# Ignore large files (example)
+*.pdf
