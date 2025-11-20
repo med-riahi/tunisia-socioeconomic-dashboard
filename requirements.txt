@@ -1,0 +1,11 @@
+pandas
+numpy
+matplotlib
+seaborn
+jupyter
+geopandas
+folium
+plotly
+tabula-py
+camelot-py[cv]
+requests
