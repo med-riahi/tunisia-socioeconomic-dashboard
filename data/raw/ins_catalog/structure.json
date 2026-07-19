@@ -1,0 +1,2134 @@
+[
+  {
+    "id": "C_NSO",
+    "name": "Socio-économique",
+    "description": "Cِette base contient les principaux indicateurs socio-économiques répartis par thèmes ",
+    "start_year": 1970,
+    "finish_year": 2050,
+    "dimensions": [
+      {
+        "id": "UNITS",
+        "name": "Échelle",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "RDS_DICT_INDICATORS_NSO",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6943049",
+    "name": "Projection de la population 2014-2044",
+    "description": "Projections de la population 2014-2044 par tranches d'âges et sexe.<br>De 2016 à 2020, la projection est disponible au niveau gouvernorat.",
+    "start_year": 2014,
+    "finish_year": 2044,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6943069",
+        "name": "Projection de la population",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6943079",
+        "name": "Genre",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6943089",
+        "name": "Tranche d'âge",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ4325069",
+    "name": "Population, ménages et logements par secteur",
+    "description": "Les premiers résultats du recensement qui concernent nombre de la population par sexe, ménages et logements par milieux(communal et non communal) et par unités administratives (régions , gouvernorats, délégations)",
+    "start_year": 1921,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ4325089",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ4325099",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6960649",
+    "name": "Logement par type",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6960669",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6960679",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6960759",
+    "name": "Logements selon le nombre des pièces",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6960779",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6960789",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6960869",
+    "name": "Logements selon la superficie couverte",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6960889",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6960899",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6961889",
+    "name": "Répartition des logements selon le mode d'occupation",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6961909",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6961919",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6962029",
+    "name": "Répartition des logements selon le raccordement aux services publiques",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6962049",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6962059",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6962149",
+    "name": "Répartition des logements selon l'équipement en facilité sanitaire",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6962169",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6962179",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6962359",
+    "name": "Répartition des logements selon la distance par rapport au plus proche jardin d'enfant et école primaire ",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6962379",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6962389",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6962469",
+    "name": "Répartition des logements selon la distance par rapport au plus proche collège ou lycée",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6962489",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6962499",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6962609",
+    "name": "Répartition des logements selon la distance par rapport au plus proche dispensaire ou hopital",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6962629",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6962639",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6962719",
+    "name": "Répartition des logements selon la distance par rapport au plus proche centre des jeunes  ou centre sportif",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6962739",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6962749",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6959869",
+    "name": "Ménages selon les sources d'approvisionnement en eau potable",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6959889",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6959899",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6959979",
+    "name": "Ménages selon les sources d'énergie et leurs utilisations ",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6959999",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6960009",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6960099",
+    "name": "Ménages selon le mode d'occupation des habitations et le type de propriété",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6960119",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6960129",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6960209",
+    "name": "Ménages selon la possession des moyens de loisirs",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6960229",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6960239",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6960429",
+    "name": "Ménages selon la possession des équipements électroménagers ",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6960449",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6960459",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6960539",
+    "name": "Ménages selon la possession des TICs",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6960559",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6960569",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6953449",
+    "name": "Population selon la tranche d'âge",
+    "description": "Répartition de la population par groupe d'âge, milieu et sexe selon le recensement générale de la population et de l'habitat 2014",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6953469",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6953479",
+        "name": "Tranche d'âge",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6953489",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6953499",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6957209",
+    "name": "Population selon l'état matrimonial",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6957229",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6957239",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6957249",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6957259",
+        "name": "Etat matrimonial",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5258219",
+    "name": "Scolarisation de la population agés de 6 à 14 ans",
+    "description": "Répartition de la population scolarisée de 6 à 14 ans selon le sexe, milieu géographique et tranche d'âge.",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ5258239",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5258249",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5258259",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5258269",
+        "name": "Tranche d'âge",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5258339",
+    "name": "Alphabétisation",
+    "description": "Répartition des alphabetes et des analphabetes 10 ans et plus selon le sexe, milieu géographique, tranche d'âge et l'état matrimonial.",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ5258359",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5258369",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5258379",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5258389",
+        "name": "Tranche d'âge",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5258399",
+        "name": "Etat matrimoniale",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6957349",
+    "name": "Répartition de la population agée de 10 ans et plus selon le niveau d'instruction",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6957369",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6957379",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6957389",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6957399",
+        "name": "Niveau d'instruction",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6957479",
+    "name": "Indicateurs éducationnels de la population en 2014",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6957489",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6957499",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6957509",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6958089",
+    "name": "Caractéristiques économiques de la Population en 2014",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6958109",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6958119",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6958129",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6958589",
+    "name": "Répartition de la population occupée agée de 15 ans et plus selon le niveau d'instruction",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6958609",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6958619",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6958629",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6958639",
+        "name": "Niveau d'instruction",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6958719",
+    "name": "Répartition de la population occupée agée de 15 ans et plus selon le secteur d'activité",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6958739",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6958749",
+        "name": "MIlieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6958759",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6958769",
+        "name": "Secteur d'activité",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6958879",
+    "name": "Répartition des  chômeurs agés de 15 ans et plus selon les tranches d'âge",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6958899",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6958909",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6958919",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6958929",
+        "name": "Tranche d'âge",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6958999",
+    "name": "Répartition des chômeurs agés de 15 ans et plus selon le niveau d'instruction",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6959019",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6959029",
+        "name": "Mileu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6959039",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6959049",
+        "name": "Niveau d'instruction",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6959149",
+    "name": "Répartition des migrants selon la raison de sortie entre 2009 et 2014",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6959169",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6959179",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6959189",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ6959639",
+    "name": "Répartition des immigrants et des émigrants selon la raison de sortie entre 2009 et 2014",
+    "description": "",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ6959659",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ6959669",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ6959679",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259329",
+    "name": "Consommation finale des ménages par produit",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2015,
+    "dimensions": [
+      {
+        "id": "OBJ5259349",
+        "name": "Produits",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259359",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259409",
+    "name": "Echanges éxtèrieurs",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "OBJ5259429",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259439",
+        "name": "Produits",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5259449",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5261419",
+    "name": "Les comptes des secteurs institutionnels",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "OBJ5261439",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5261449",
+        "name": "Opérations et soldes comptables",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259729",
+    "name": "Ressources et emplois des biens et services",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2019,
+    "dimensions": [
+      {
+        "id": "OBJ5259749",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259759",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259809",
+    "name": "Produit intérieur brut selon l'approche des revenus",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2015,
+    "dimensions": [
+      {
+        "id": "OBJ5259829",
+        "name": "Les agrégats",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259839",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259889",
+    "name": "Principaux agrégats",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2019,
+    "dimensions": [
+      {
+        "id": "OBJ5259909",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259959",
+    "name": "Taux et ratios par habitant",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2019,
+    "dimensions": [
+      {
+        "id": "OBJ5259979",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5260029",
+    "name": "Revenus primaires et disponibles bruts",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2015,
+    "dimensions": [
+      {
+        "id": "OBJ5260049",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5260099",
+    "name": "Opérations agrégées",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2015,
+    "dimensions": [
+      {
+        "id": "OBJ5260119",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5258629",
+    "name": "Production par produits",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "OBJ5258649",
+        "name": "Produits",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5258659",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5258709",
+    "name": "Production par secteur d'activité",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "OBJ5258729",
+        "name": "Secteur d'activité",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5258739",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5258819",
+    "name": "Valeur ajoutée par secteur d'activité",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2019,
+    "dimensions": [
+      {
+        "id": "OBJ5258839",
+        "name": "Secteur d'activité",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5258849",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5258899",
+    "name": "Valeur ajoutée par secteur institutionnel",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2015,
+    "dimensions": [
+      {
+        "id": "OBJ5258919",
+        "name": "Secteur institutionnel",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5258929",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5258979",
+    "name": "Formation Brute de Capital Fixe par produit",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2015,
+    "dimensions": [
+      {
+        "id": "OBJ5258999",
+        "name": "Produits",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259009",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259059",
+    "name": "Formation Brute de Capital Fixe par secteur d'activité",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2015,
+    "dimensions": [
+      {
+        "id": "OBJ5259079",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259089",
+        "name": "Secteur d'activité",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5259099",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259149",
+    "name": "Formation Brute de Capital Fixe par domaine",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2019,
+    "dimensions": [
+      {
+        "id": "OBJ5259169",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259179",
+        "name": "Domaine",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5259189",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259239",
+    "name": "Formation Brute de Capital Fixe par secteur institutionnel",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2020,
+    "dimensions": [
+      {
+        "id": "OBJ5259259",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259269",
+        "name": "Secteur institutionnel",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5259279",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259499",
+    "name": "Opérations par secteur d'activité",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "OBJ5259519",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259529",
+        "name": "Secteur d'activité",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259579",
+    "name": "Opérations par Secteur institutionnel",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "OBJ5259599",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5259609",
+        "name": "Secteur institutionnel",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5259659",
+    "name": "Impôts indirects et transferts sociaux",
+    "description": "",
+    "start_year": 1997,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "OBJ5259679",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5262999",
+    "name": "PIB et valeurs ajoutées par secteurs d'activité (2010)",
+    "description": "",
+    "start_year": 2000,
+    "finish_year": 2022,
+    "dimensions": [
+      {
+        "id": "OBJ5263019",
+        "name": "Secteur d'activité",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5263029",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5263059",
+    "name": "L'équilibre général",
+    "description": "",
+    "start_year": 2000,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "OBJ5263079",
+        "name": "Agrégats",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5263089",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ7278999",
+    "name": "Enquête Budgétaire 2015",
+    "description": "",
+    "start_year": 2015,
+    "finish_year": 2015,
+    "dimensions": [
+      {
+        "id": "OBJ7279019",
+        "name": "Dépense annuelle moyenne  par personne selon",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ7279029",
+        "name": "Produits",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ7280789",
+    "name": "Consommation des produits alimentaires 2015",
+    "description": "",
+    "start_year": 2015,
+    "finish_year": 2015,
+    "dimensions": [
+      {
+        "id": "OBJ7280809",
+        "name": "Consommation des aliments par type de classement",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ7280819",
+        "name": "Produits  alimentaires",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ9105599",
+    "name": "Indicateurs Démographiques du Genre",
+    "description": "",
+    "start_year": 1960,
+    "finish_year": 2020,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ9105619",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ9105629",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9105639",
+        "name": "Groupe d'âge",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9105649",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9105659",
+        "name": "Etat matrimoniale",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ9106699",
+    "name": "Santé et services connexes",
+    "description": "",
+    "start_year": 1966,
+    "finish_year": 2020,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ9106709",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ9106719",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9106729",
+        "name": "Groupe d'âge",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9106739",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ9106809",
+    "name": "Vie publique et prise de décision",
+    "description": "",
+    "start_year": 1959,
+    "finish_year": 2020,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ9106829",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ9106839",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9106849",
+        "name": "Groupe d'âge ",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9106859",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ9106929",
+    "name": "Droits fondamentaux des femmes",
+    "description": "",
+    "start_year": 1980,
+    "finish_year": 2020,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ9106949",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ9106959",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9106969",
+        "name": "Groupe d'âge",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9106979",
+        "name": "Etat matrimonial",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ9106989",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ10027409",
+    "name": "Participation économique",
+    "description": "",
+    "start_year": 1994,
+    "finish_year": 2020,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ10027429",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ10027439",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10027449",
+        "name": "Groupe d'âge",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10027459",
+        "name": "Etat matrimonial",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10027469",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10027479",
+        "name": "Secteur d'activité",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10027489",
+        "name": "Niveau d'instruction",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10027499",
+        "name": "Statut dans l'emploi",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ10330119",
+    "name": "Education",
+    "description": "",
+    "start_year": 1990,
+    "finish_year": 2020,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ10330139",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ10330149",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10330159",
+        "name": "Groupe d'âge",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10330169",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10330179",
+        "name": "Niveau d'éducation",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ10330189",
+        "name": "Domaine d'éducation",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ10957839",
+    "name": "PIB et valeurs ajoutées par secteurs d'activité (2015) ",
+    "description": "",
+    "start_year": 2010,
+    "finish_year": 2030,
+    "dimensions": [
+      {
+        "id": "OBJ10957849",
+        "name": "Secteur d'activité",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ10957859",
+        "name": "Value",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ11278919",
+    "name": "Ressources et emplois des biens et services (2015)",
+    "description": "",
+    "start_year": 2015,
+    "finish_year": 2030,
+    "dimensions": [
+      {
+        "id": "OBJ11278929",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ11278939",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ11279079",
+    "name": "Valeur ajoutée par secteur d'activité (2015)",
+    "description": "",
+    "start_year": 2015,
+    "finish_year": 2030,
+    "dimensions": [
+      {
+        "id": "OBJ11279089",
+        "name": "Secteur d'activité",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ11279099",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ11288479",
+    "name": "Principaux agrégats (2015)",
+    "description": "",
+    "start_year": 2015,
+    "finish_year": 2030,
+    "dimensions": [
+      {
+        "id": "OBJ11288499",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      }
+    ]
+  },
+  {
+    "id": "OBJ11288549",
+    "name": "Taux et ratios par habitant (2015)",
+    "description": "",
+    "start_year": 2015,
+    "finish_year": 2030,
+    "dimensions": [
+      {
+        "id": "OBJ11288569",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      }
+    ]
+  },
+  {
+    "id": "OBJ11288619",
+    "name": "Formation Brute de Capital Fixe par domaine (2015)",
+    "description": "",
+    "start_year": 2015,
+    "finish_year": 2030,
+    "dimensions": [
+      {
+        "id": "OBJ11288639",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ11288649",
+        "name": "Domaine",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ11288659",
+        "name": "Valeur",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5052829",
+    "name": "Raccordement des logement\t\t\t",
+    "description": "Répartition de logement par gouvernorat, milieu géographique, type, raccordement au STEG, raccordement au GAZ, raccordement au SONEDE, équipement de citerne et méthode d’assainissement.",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ5052839",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5052849",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5052859",
+        "name": "Type de logement",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5052869",
+        "name": "Raccordement au STEG",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5052879",
+        "name": "Raccordement au réseau GAZ",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5052889",
+        "name": "Raccordement au réseau de SONEDE",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5052899",
+        "name": "Citerne",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5052909",
+        "name": "Méthode d'assainissement",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5156599",
+    "name": "Caractéristique des logement\t\t\t",
+    "description": "Répartition de logement par gouvernorat, milieu<br>géographique, type, nombre de pièces, superficie et nombre de ménage.",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ5156609",
+        "name": "Indicateurs\t\t\t\t\t\t",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5156619",
+        "name": "Milieu\t\t\t",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5156629",
+        "name": "Type de logement\t\t\t",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5156639",
+        "name": "Nombre de pièce\t\t\t\t\t\t\t",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5156649",
+        "name": "Superificie\t\t\t",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5156659",
+        "name": "Nombre de ménage occupant le logement\t\t\t",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ4847629",
+    "name": "Sources d'énergie des ménages",
+    "description": "Répartition des ménages par gouvernorat, milieu géographique et source d'énergie par type d'utilisation",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ4847649",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ4847659",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847669",
+        "name": "Source d'énergie pour cuisiner",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847679",
+        "name": "Source d'énergie pour chauffer l'eau",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847689",
+        "name": "Source d'énergie pour chauffer le logement",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ4847719",
+    "name": "Caractéristiques des ménages\t\t\t\t",
+    "description": "Répartition des ménages par gouvernorat, milieu géographique, type, mode d'occupation et nombre de pièces utilisées.",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ4847739",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ4847749",
+        "name": "Milieu\t",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847759",
+        "name": "Type de ménage",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847769",
+        "name": "Mode d'occupation du logement\t",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847779",
+        "name": "Nombre de pièces utilisées\t\t",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ4847809",
+    "name": "Possession des moyens de transport",
+    "description": "Répartition des ménages par gouvernorat, milieu géographique et possession de différents moyens de transport (Bicyclette, Moto, Voiture).",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ4847829",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ4847839",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847849",
+        "name": "Bicyclette",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847859",
+        "name": "Moto",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847869",
+        "name": "Voiture",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ4847899",
+    "name": "Possession des moyens de confort et de loisirs",
+    "description": "Répartition des ménages par gouvernorat, milieu géographique et possession de différents moyens de confort et de loisir (Radio, Télévision, Parabole, Antenne terrestre, Bibliothèque).",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ4847919",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ4847929",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847939",
+        "name": "Radio, lecteur music",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847949",
+        "name": "Télévision",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847959",
+        "name": "Parabole",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847969",
+        "name": "Antenne terrestre",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4847979",
+        "name": "Bibliothèque",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ4848009",
+    "name": "Accès des ménages aux sources d'eau et d'éclairage\t\t\t\t\t\t\t",
+    "description": "Répartition des ménages par gouvernorat, milieu géographique, type, principal source d'eau, principal source d'eau à boire et source d'éclairage.",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ4848029",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ4848039",
+        "name": "Milieu\t\t",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4848049",
+        "name": "Principale source d'eau\t",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4848059",
+        "name": "Principale source d'eau à boire",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4848069",
+        "name": "Source d'éclairage",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ4848099",
+    "name": "Possession des TICs",
+    "description": "Répartition des ménages par gouvernorat, milieu géographique et possession de différents moyens de TIC (Téléphone fixe, Ordinateur, Connexion Internet et Téléphone portable).",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ4848119",
+        "name": "Indicateurs",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ4848129",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4848139",
+        "name": "Téléphone fixe",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4848149",
+        "name": "Ordinateur",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4848159",
+        "name": "Connexion Internet",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ4848169",
+        "name": "Téléphone portable",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5049479",
+    "name": "Equipement en électroménager",
+    "description": "Répartition des ménages par gouvernorat, milieu géographique et possession de différents moyens d'électroménager (Réfrigérateur, Cuisinière à four, Machine à laver, Climatiseur, Chauffage central).",
+    "start_year": 2014,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ5049499",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5049509",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5049519",
+        "name": "Réfrigérateur",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5049529",
+        "name": "Cuisinière à four",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5049539",
+        "name": "Machine à laver",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5049549",
+        "name": "Climatiseur",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5049559",
+        "name": "Chauffage central",
+        "dimension_type": "Custom"
+      }
+    ]
+  },
+  {
+    "id": "OBJ5156249",
+    "name": "Caractéristiques de la population",
+    "description": "Répartition de la population tunisienne par gouvernorat, milieu géographique, sexe, tranche d’âge, état matrimonial et nationalité.",
+    "start_year": 1994,
+    "finish_year": 2014,
+    "dimensions": [
+      {
+        "id": "RDS_DICT_REGIONS_NSO",
+        "name": "Régions",
+        "dimension_type": "Region"
+      },
+      {
+        "id": "OBJ5156269",
+        "name": "Indicateur",
+        "dimension_type": "Indicator"
+      },
+      {
+        "id": "OBJ5156279",
+        "name": "Milieu",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5156289",
+        "name": "Tranche d'âge",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5156299",
+        "name": "Etat matrimonial",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5156309",
+        "name": "Nationalité",
+        "dimension_type": "Custom"
+      },
+      {
+        "id": "OBJ5156319",
+        "name": "Sexe",
+        "dimension_type": "Custom"
+      }
+    ]
+  }
+]

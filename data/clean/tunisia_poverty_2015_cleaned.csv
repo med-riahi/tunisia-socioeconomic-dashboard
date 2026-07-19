@@ -1,0 +1,265 @@
+Delegation,PrimDrop%,SecDrop%,TotalDrop%,Poverty%,Governorate,District
+Sejnane,0.4,8.5,3.9,39.9,Bizerte,1
+Joumine,0.3,10.9,4.8,36.6,Bizerte,1
+Ghazala,0.2,7.7,3.2,34.0,Bizerte,1
+Mateur,0.1,5.2,2.6,19.3,Bizerte,1
+Utique,0.2,7.3,2.7,19.1,Bizerte,1
+Bizerte South,0.3,4.4,1.7,15.9,Bizerte,1
+El Alia,0.5,7.7,3.4,15.1,Bizerte,1
+Ghar El Melh,0.7,8.6,3.6,14.5,Bizerte,1
+Menzel Bourguiba,0.3,7.4,3.9,12.8,Bizerte,1
+Ras Jebel,0.2,7.1,3.4,12.2,Bizerte,1
+Tinja,0.1,4.3,2.1,11.3,Bizerte,1
+Zarzouna,0.2,3.8,1.3,10.9,Bizerte,1
+Menzel Jemil,0.2,7.4,3.8,10.6,Bizerte,1
+Bizerte North,0.2,6.5,3.7,5.3,Bizerte,1
+Amdoun,0.5,7.3,3.4,37.6,Beja,1
+Nefza,0.5,7.5,3.8,37.5,Beja,1
+Goubellate,0.6,11.1,5.0,36.9,Beja,1
+Teboursouk,0.1,7.6,3.5,27.3,Beja,1
+Thibar,0.4,7.0,3.1,25.8,Beja,1
+Testour,0.3,6.4,2.9,25.5,Beja,1
+Beja North,0.1,6.5,2.4,23.0,Beja,1
+Beja South,0.1,7.0,4.5,18.5,Beja,1
+Mejez El Bab,0.5,5.5,2.6,17.1,Beja,1
+Fernana,1.1,7.7,3.8,36.9,Jendouba,1
+Ain Draham,0.4,8.3,4.4,27.2,Jendouba,1
+Ghardimaou,0.8,10.6,5.1,24.8,Jendouba,1
+Balta Bouaouene,0.6,5.4,3.3,23.1,Jendouba,1
+Oued Mliz,0.7,9.9,4.8,21.0,Jendouba,1
+Jendouba North,0.3,10.6,5.0,19.6,Jendouba,1
+Tabarka,0.2,6.5,3.2,16.7,Jendouba,1
+Bou Salem,0.3,8.1,3.4,16.6,Jendouba,1
+Jendouba South,0.3,7.7,4.2,10.7,Jendouba,1
+Nebeur,0.7,9.6,3.4,45.4,Kef,1
+Sakiet Sidi Youssef,0.4,8.2,5.3,39.7,Kef,1
+Dahmani,1.0,7.7,3.0,38.4,Kef,1
+Tajerouine,0.4,8.6,1.4,37.7,Kef,1
+El Ksour,0.5,6.7,5.5,37.1,Kef,1
+Kalaa Khasba,0.4,5.4,6.0,35.3,Kef,1
+Le Sers,0.4,9.4,5.7,34.4,Kef,1
+Kalaat Senan,0.1,9.2,1.7,32.8,Kef,1
+Jerissa,0.3,4.3,5.7,31.9,Kef,1
+El Kef East,0.2,6.2,3.1,24.6,Kef,1
+El Kef West,0.2,8.5,4.4,21.9,Kef,1
+Sijoumi,1.1,4.1,2.7,11.5,Tunis,2
+Jebel Jloud,0.4,8.0,3.9,9.5,Tunis,2
+Sidi Hassine,0.3,8.4,3.6,9.4,Tunis,2
+La Medina,0.1,6.7,4.8,6.6,Tunis,2
+El Omrane,0.3,6.7,3.3,6.3,Tunis,2
+El Harairia,0.3,6.6,3.0,6.1,Tunis,2
+Kabbaria,0.2,5.2,2.4,5.3,Tunis,2
+Bab Souika,0.2,12.1,6.2,4.5,Tunis,2
+Sidi El Bechir,0.1,8.4,4.3,4.2,Tunis,2
+Ezzouhour,0.1,9.3,3.5,4.0,Tunis,2
+El Ouerdia,0.1,6.8,3.4,3.9,Tunis,2
+El Omrane Superior,0.1,6.5,3.2,3.5,Tunis,2
+El Kram,0.1,3.8,1.7,3.0,Tunis,2
+El Marsa,0.2,6.7,3.4,2.2,Tunis,2
+Ettahrir,0.0,7.4,3.7,2.0,Tunis,2
+Bardo,0.1,5.3,3.2,1.8,Tunis,2
+Bab Bhar,0.1,4.5,2.8,1.6,Tunis,2
+Carthage,0.0,6.5,3.6,1.6,Tunis,2
+Cite El Khadra,0.1,4.1,1.7,1.4,Tunis,2
+La Goulette,0.1,7.1,4.4,1.1,Tunis,2
+El Menzah,0.0,1.7,1.1,0.2,Tunis,2
+Kalaat El Andalous,0.4,8.3,3.8,12.5,Ariana,2
+Ettadhamen,0.1,8.2,3.5,12.4,Ariana,2
+Sidi Thabet,0.3,6.4,2.8,9.1,Ariana,2
+Mnihla,0.1,8.9,3.9,8.8,Ariana,2
+Raoued,0.1,5.9,2.6,6.9,Ariana,2
+Soukra,0.2,7.7,3.0,4.8,Ariana,2
+Ariana City,0.1,3.9,2.6,1.3,Ariana,2
+Mornag,0.2,7.0,3.1,11.2,Ben Arous,2
+Fouchana,0.1,5.6,2.4,7.3,Ben Arous,2
+Mhamdia,0.2,10.6,4.6,7.1,Ben Arous,2
+Hammamlif,0.2,7.1,4.0,6.4,Ben Arous,2
+New Medina,0.1,5.1,2.3,5.2,Ben Arous,2
+Ben Arous,0.1,4.8,2.3,5.0,Ben Arous,2
+Hammam Echatt,0.2,7.5,3.7,5.0,Ben Arous,2
+Rades,0.3,7.7,4.1,4.3,Ben Arous,2
+Boumhel Bassatine,0.1,4.2,1.8,4.1,Ben Arous,2
+Megrine,0.1,4.3,2.5,3.6,Ben Arous,2
+El Mourouj,0.0,5.4,2.9,3.2,Ben Arous,2
+Ezzahra,0.1,8.0,4.3,2.6,Ben Arous,2
+Ennadhour,0.5,7.4,3.5,22.5,Zaghouan,2
+Saouaf,0.2,9.0,3.4,19.5,Zaghouan,2
+Bir Mcharga,0.2,9.4,3.6,15.8,Zaghouan,2
+Zriba,0.3,5.2,2.2,13.0,Zaghouan,2
+El Fahs,0.2,5.4,2.5,12.5,Zaghouan,2
+Zaghouan,0.3,7.4,3.7,7.2,Zaghouan,2
+Tebourba,0.2,8.8,4.5,15.2,Manouba,2
+Battane,0.2,4.1,1.8,14.5,Manouba,2
+Borj El Amri,0.2,10.7,4.4,12.1,Manouba,2
+Jedaida,0.2,5.8,2.4,11.9,Manouba,2
+Daouar Hicher,0.1,7.0,3.3,10.8,Manouba,2
+Oued Ellil,0.2,5.5,2.5,8.2,Manouba,2
+Mornaguia,0.2,6.0,2.9,7.8,Manouba,2
+Manouba,0.1,8.2,4.7,3.8,Manouba,2
+Takelsa,0.3,5.8,5.9,19.1,Nabeul,2
+Hammam Ghezaz,0.1,6.2,2.9,16.0,Nabeul,2
+Elmida,0.5,6.9,3.6,11.7,Nabeul,2
+Haouaria,0.3,6.7,5.0,11.0,Nabeul,2
+Kelibia,0.2,7.1,3.3,10.9,Nabeul,2
+Menzel Temime,0.5,8.5,2.6,10.2,Nabeul,2
+Bouargoub,0.3,8.1,0.3,8.6,Nabeul,2
+Slimane,0.2,9.5,2.3,7.8,Nabeul,2
+Korba,0.4,7.9,3.2,7.7,Nabeul,2
+Menzel Bouzelfa,0.2,8.4,3.0,7.1,Nabeul,2
+Beni Khalled,0.3,7.6,1.7,6.4,Nabeul,2
+Grombalia,0.3,8.9,0.3,6.3,Nabeul,2
+Hammamet,0.3,7.8,0.3,5.9,Nabeul,2
+Beni Khiar,0.3,5.8,0.3,5.8,Nabeul,2
+Dar Chaabane,0.3,5.8,4.6,4.9,Nabeul,2
+Nabeul,0.3,7.1,1.5,4.7,Nabeul,2
+Rouhia,1.2,7.3,2.7,40.7,Siliana,3
+Kesra,0.4,5.1,4.5,32.2,Siliana,3
+Makthar,0.7,9.1,3.3,26.5,Siliana,3
+Aroussa,0.8,10.3,4.9,25.2,Siliana,3
+Gaafour,0.3,7.2,4.7,24.4,Siliana,3
+Bargou,0.0,5.9,2.8,24.4,Siliana,3
+Bourouis,0.8,8.7,3.1,21.8,Siliana,3
+Bouarada,0.2,5.1,2.9,21.8,Siliana,3
+El Krib,0.2,8.0,5.4,20.0,Siliana,3
+Siliana South,0.3,4.2,2.3,19.9,Siliana,3
+Siliana North,0.1,5.2,2.4,16.8,Siliana,3
+Kondar,0.8,20.7,4.9,28.7,Sousse,3
+Sidi El Heni,1.1,13.0,4.2,27.9,Sousse,3
+Enfida,0.3,8.3,4.0,23.8,Sousse,3
+Bouficha,0.3,10.2,3.9,21.9,Sousse,3
+Sidi Abdelhamid,0.2,9.2,0.5,17.7,Sousse,3
+Zaouia Ksiba Thrayet,0.5,5.8,2.3,17.3,Sousse,3
+Sidi Bou Ali,0.6,6.1,4.1,16.5,Sousse,3
+Hergla,0.7,3.8,4.6,16.3,Sousse,3
+Kalaa Kebira,0.5,6.0,3.9,16.2,Sousse,3
+Kalaa Sghira,0.4,5.9,4.4,15.1,Sousse,3
+Msaken,0.4,6.8,3.1,14.1,Sousse,3
+Sousse Riadh,0.2,5.9,2.8,10.7,Sousse,3
+Akouda,0.3,4.9,3.4,9.3,Sousse,3
+Hammem Sousse,0.1,4.1,1.8,8.5,Sousse,3
+Sousse Jawhara,0.2,6.6,1.7,7.0,Sousse,3
+Sousse El Medina,0.2,7.2,3.7,5.5,Sousse,3
+Hassi Frid,3.5,25.6,7.4,53.5,Kasserine,3
+Jedeliane,0.5,6.1,4.7,53.1,Kasserine,3
+El Ayoun,1.3,17.0,2.6,50.1,Kasserine,3
+Majel Ben Abbes,0.8,9.0,3.9,41.4,Kasserine,3
+Haidra,0.3,8.4,8.1,39.8,Kasserine,3
+Sbiba,1.9,9.0,5.1,37.1,Kasserine,3
+Feriana,0.8,9.6,4.1,36.9,Kasserine,3
+Kasserine South,1.5,8.1,4.6,34.0,Kasserine,3
+Sbitla,1.3,9.4,3.2,33.0,Kasserine,3
+Foussana,1.4,9.9,3.5,31.5,Kasserine,3
+Thala,0.4,7.2,1.6,30.9,Kasserine,3
+Ezzouhour,1.6,9.1,10.4,27.8,Kasserine,3
+Kasserine North,0.8,7.2,1.9,18.9,Kasserine,3
+Oueslatia,0.6,9.1,3.3,40.9,Kairouan,3
+Ala,0.8,7.3,4.0,38.3,Kairouan,3
+Hajeb El Ayoun,1.3,11.4,4.3,36.6,Kairouan,3
+Sbikha,1.3,8.1,4.1,35.1,Kairouan,3
+Sidi Ali Ben Nasrallah,0.8,6.9,2.7,35.1,Kairouan,3
+Sidi Amor Bou Hajla,1.5,6.9,2.4,32.7,Kairouan,3
+Haffouz,0.5,6.7,2.1,31.4,Kairouan,3
+Cherarda,1.0,6.3,2.9,28.0,Kairouan,3
+Chebika,0.9,7.5,3.4,24.2,Kairouan,3
+Kairouan South,1.0,7.4,2.2,23.0,Kairouan,3
+Kairouan North,0.4,5.0,2.3,20.8,Kairouan,3
+Zaramdine,0.3,7.4,5.3,13.1,Monastir,3
+Moknine,0.5,7.3,1.5,12.1,Monastir,3
+Beni Hassen,0.3,2.8,3.2,10.6,Monastir,3
+Ouerdanine,0.6,7.7,4.5,8.7,Monastir,3
+Bekalta,0.1,6.4,4.8,8.3,Monastir,3
+Jemmal,0.6,6.1,1.8,7.4,Monastir,3
+Ksar Hellal,0.3,6.9,3.0,6.8,Monastir,3
+Teboulba,0.3,4.7,4.6,6.7,Monastir,3
+Sahline,0.2,6.4,2.8,6.7,Monastir,3
+Bembla,0.3,5.5,3.7,6.4,Monastir,3
+Ksibet Mediouni,0.2,5.1,0.8,5.8,Monastir,3
+Sayada Lamta Bouhjar,0.5,6.1,3.1,4.7,Monastir,3
+Monastir,0.3,5.8,1.9,4.6,Monastir,3
+Chorbane,0.8,5.2,2.3,36.9,Mahdia,3
+Ouled Chamekh,1.2,7.4,5.1,35.0,Mahdia,3
+Hebira,0.4,6.8,4.6,33.4,Mahdia,3
+Melloulech,0.8,7.5,3.2,30.9,Mahdia,3
+Boumardass,0.8,9.0,2.7,30.1,Mahdia,3
+Essouassi,0.7,11.0,3.5,29.2,Mahdia,3
+Sidi Alouane,0.8,7.8,2.6,28.9,Mahdia,3
+El Djem,0.3,8.2,2.5,26.5,Mahdia,3
+Ksour Essef,0.6,5.8,4.6,22.2,Mahdia,3
+Chebba,0.3,3.8,3.4,15.5,Mahdia,3
+Mahdia,0.4,7.6,1.1,13.3,Mahdia,3
+Hazoua,0.5,9.2,4.1,22.6,Tozeur,4
+Tamaghza,0.0,7.2,3.8,20.5,Tozeur,4
+Degache,0.6,6.2,1.3,17.4,Tozeur,4
+Nefta,0.2,8.8,1.6,17.3,Tozeur,4
+Tozeur,0.2,7.1,1.8,10.3,Tozeur,4
+Menzel Bouzayene,0.8,12.3,6.5,39.0,Sidi Bouzid,4
+Mazzouna,1.1,7.7,2.9,34.3,Sidi Bouzid,4
+Jelma,1.1,7.7,3.4,31.4,Sidi Bouzid,4
+Sebbalet Ouled Asker,1.5,10.5,5.9,31.2,Sidi Bouzid,4
+Sidi Ali Ben Aoune,1.4,7.6,5.9,31.0,Sidi Bouzid,4
+Bir El Haffey,0.8,9.3,2.7,27.4,Sidi Bouzid,4
+Regueb,0.7,6.7,2.7,23.7,Sidi Bouzid,4
+Maknassy,0.1,4.5,3.5,23.3,Sidi Bouzid,4
+Sidi Bouzid East,0.7,9.6,3.7,21.8,Sidi Bouzid,4
+Ouled Haffouz,0.4,7.5,4.4,21.3,Sidi Bouzid,4
+Souk Jedid,0.5,15.6,2.4,20.8,Sidi Bouzid,4
+Sidi Bouzid West,0.3,5.0,2.6,17.7,Sidi Bouzid,4
+Bir Ali Ben Khalifa,1.1,6.4,2.6,17.4,Sfax,4
+El Ghraiba,0.8,7.0,4.0,14.5,Sfax,4
+Skhira,0.5,8.0,2.9,12.4,Sfax,4
+Menzel Chaker,0.7,8.8,3.6,12.2,Sfax,4
+Hencha,0.6,8.2,4.6,11.8,Sfax,4
+Agareb,0.6,6.3,4.1,10.7,Sfax,4
+El Mahres,0.3,10.9,3.9,8.9,Sfax,4
+Jebeniana,0.8,8.0,2.0,8.7,Sfax,4
+El Amera,1.0,7.6,5.3,6.8,Sfax,4
+Thyna,0.5,4.3,1.5,6.2,Sfax,4
+Kerkennah,0.4,8.5,3.2,4.6,Sfax,4
+Sakiet Eddaier,0.6,6.0,2.4,3.2,Sfax,4
+Sakiet Ezzit,0.5,4.7,1.7,3.2,Sfax,4
+Sfax West,0.3,5.1,1.9,3.0,Sfax,4
+Sfax South,0.4,4.7,1.3,3.0,Sfax,4
+Sfax City,0.2,4.9,2.3,2.5,Sfax,4
+Belkhir,0.4,7.8,6.2,31.2,Gafsa,4
+Sened,0.4,9.3,3.6,27.2,Gafsa,4
+Gafsa North,0.3,6.3,5.0,23.0,Gafsa,4
+Redeyef,0.2,6.8,3.7,21.1,Gafsa,4
+Oum Laarayes,0.2,7.8,2.8,20.5,Gafsa,4
+Guetar,0.2,8.5,3.0,19.8,Gafsa,4
+Mdhila,0.1,10.0,5.3,18.7,Gafsa,4
+Elksar,0.1,7.9,2.4,16.9,Gafsa,4
+Metlaoui,0.2,6.8,3.2,16.2,Gafsa,4
+Sidi Aiche,0.7,10.6,2.1,16.1,Gafsa,4
+Gafsa South,0.3,10.0,1.8,15.4,Gafsa,4
+Dhiba,0.5,5.0,5.7,33.3,Tataouine,5
+Remada,0.5,13.2,1.4,27.4,Tataouine,5
+Tataouine North,0.4,9.9,1.9,18.4,Tataouine,5
+Bir Lahmar,0.4,3.8,7.1,18.4,Tataouine,5
+Tataouine South,0.2,9.0,1.8,17.1,Tataouine,5
+Smar,0.3,6.8,4.3,14.4,Tataouine,5
+Ghomrassen,0.1,7.7,1.4,10.5,Tataouine,5
+Menzel Habib,0.7,8.7,5.8,33.6,Gabes,5
+Matmata,0.7,5.1,4.9,26.4,Gabes,5
+New Matmata,0.6,8.4,4.5,23.6,Gabes,5
+Mareth,0.2,7.2,1.5,21.2,Gabes,5
+El Hamma,0.2,9.8,1.4,20.3,Gabes,5
+Ghannouche,0.3,8.5,1.7,20.0,Gabes,5
+Metouia,0.2,6.4,0.5,17.9,Gabes,5
+Gabes West,0.1,6.5,6.0,15.0,Gabes,5
+Gabes El Medina,0.2,7.6,2.6,11.1,Gabes,5
+Gabes South,0.2,5.6,1.9,9.4,Gabes,5
+Douz South,0.1,2.5,0.8,25.9,Kebili,5
+Faouar,0.1,10.9,7.0,25.2,Kebili,5
+Souk Lahad,0.1,1.6,2.7,21.7,Kebili,5
+Douz North,0.2,1.5,4.2,20.4,Kebili,5
+Kebili South,0.3,4.7,1.4,15.8,Kebili,5
+Kebili North,0.2,1.8,1.6,12.3,Kebili,5
+Beni Kheddache,0.6,10.2,4.0,36.9,Medenine,5
+Sidi Makhlouf,0.5,7.4,6.5,33.4,Medenine,5
+Ben Guerdene,0.4,9.8,1.7,23.1,Medenine,5
+Medenine South,0.1,5.7,2.6,20.7,Medenine,5
+Medenine North,0.2,8.4,5.2,18.9,Medenine,5
+Djerba Ajim,0.0,7.8,4.2,16.7,Medenine,5
+Zarzis,0.2,9.3,2.3,15.8,Medenine,5
+Djerba Midoun,0.2,6.1,1.5,11.5,Medenine,5
+Djerba Houmt Souk,0.2,5.3,2.4,9.5,Medenine,5

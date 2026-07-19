@@ -1,0 +1,391 @@
+# Human-approved shortlist of INS indicators for v1, picked from the
+# empirical ranking in data/interim/indicator_scores.csv (Phase 2 checkpoint).
+# Each entry: slug (used as the DB key), source_id, indicator_key (the C_NSO
+# indicator dimension KEY), theme_group, theme (original INS theme), name,
+# unit. To add more later: find the indicator_key in indicator_scores.csv
+# (or query the cached tree in data/raw/ins_catalog/indicators_c_nso.json)
+# and append an entry here — no code changes needed.
+
+- slug: birth_rate
+  source_id: C_NSO
+  indicator_key: "27529859"
+  theme_group: population
+  theme: Population
+  name: "Natalité (taux de natalité)"
+  unit: "Pour 1000 habitants"
+
+- slug: death_rate
+  source_id: C_NSO
+  indicator_key: "27529869"
+  theme_group: population
+  theme: Population
+  name: "Mortalité (taux de mortalité)"
+  unit: "Pour 1000 habitants"
+
+- slug: fertility_rate
+  source_id: C_NSO
+  indicator_key: "27529909"
+  theme_group: population
+  theme: Population
+  name: "Indice synthétique de fécondité"
+  unit: "Indice"
+
+- slug: infant_mortality_rate
+  source_id: C_NSO
+  indicator_key: "27529919"
+  theme_group: population
+  theme: Population
+  name: "Taux de mortalité infantile"
+  unit: "Pour 1000 naissances"
+
+- slug: natural_growth_rate
+  source_id: C_NSO
+  indicator_key: "27529899"
+  theme_group: population
+  theme: Population
+  name: "Taux d'accroissement naturel"
+  unit: "Pourcentage"
+
+- slug: population_jan1
+  source_id: C_NSO
+  indicator_key: "11922316"
+  theme_group: population
+  theme: Population
+  name: "Population au 1er janvier"
+  unit: "Nombre"
+
+- slug: sex_ratio
+  source_id: C_NSO
+  indicator_key: "27966149"
+  theme_group: population
+  theme: Population
+  name: "Rapport de masculinité"
+  unit: "Pourcentage"
+
+- slug: life_expectancy_male
+  source_id: C_NSO
+  indicator_key: "27529939"
+  theme_group: population
+  theme: Population
+  name: "Espérance de vie à la naissance - Hommes"
+  unit: "Année"
+
+- slug: life_expectancy_female
+  source_id: C_NSO
+  indicator_key: "27529949"
+  theme_group: population
+  theme: Population
+  name: "Espérance de vie à la naissance - Femmes"
+  unit: "Année"
+
+- slug: urban_population_share
+  source_id: C_NSO
+  indicator_key: "27966159"
+  theme_group: population
+  theme: Population
+  name: "Part de la population urbaine"
+  unit: "Pourcentage"
+
+- slug: population_density
+  source_id: C_NSO
+  indicator_key: "27966169"
+  theme_group: population
+  theme: Population
+  name: "Densité de la population au km²"
+  unit: "Habitants/km²"
+
+- slug: divorces
+  source_id: C_NSO
+  indicator_key: "22269716"
+  theme_group: population
+  theme: Population
+  name: "Divorces"
+  unit: "Nombre"
+
+- slug: marriage_rate
+  source_id: C_NSO
+  indicator_key: "27529889"
+  theme_group: population
+  theme: Population
+  name: "Nuptialité (taux de nuptialité)"
+  unit: "Pour 1000 habitants"
+
+- slug: smag_daily_wage
+  source_id: C_NSO
+  indicator_key: "22315316"
+  theme_group: employment_living_conditions
+  theme: Salaires
+  name: "SMAG (salaire minimum agricole garanti)"
+  unit: "Dinars/jour"
+
+- slug: smig_48h_hourly_wage
+  source_id: C_NSO
+  indicator_key: "22315816"
+  theme_group: employment_living_conditions
+  theme: Salaires
+  name: "SMIG - régime 48h/semaine"
+  unit: "Dinars/heure"
+
+- slug: private_sector_wage_growth
+  source_id: C_NSO
+  indicator_key: "27966139"
+  theme_group: employment_living_conditions
+  theme: Salaires
+  name: "Taux d'évolution des salaires - secteur privé non agricole"
+  unit: "Pourcentage"
+
+- slug: electricity_access_rate
+  source_id: C_NSO
+  indicator_key: "27329416"
+  theme_group: employment_living_conditions
+  theme: "Ménages et conditions de vie"
+  name: "Taux de branchement en courant électrique"
+  unit: "Pourcentage"
+
+- slug: water_access_rate
+  source_id: C_NSO
+  indicator_key: "27329516"
+  theme_group: employment_living_conditions
+  theme: "Ménages et conditions de vie"
+  name: "Taux de branchement en eau potable"
+  unit: "Pourcentage"
+
+- slug: sewage_connection_rate
+  source_id: C_NSO
+  indicator_key: "27329716"
+  theme_group: employment_living_conditions
+  theme: "Ménages et conditions de vie"
+  name: "Taux de branchement au réseau d'assainissement (milieu communal)"
+  unit: "Pourcentage"
+
+- slug: households_count
+  source_id: C_NSO
+  indicator_key: "27327016"
+  theme_group: employment_living_conditions
+  theme: "Ménages et conditions de vie"
+  name: "Nombre de ménages"
+  unit: "Milliers"
+
+- slug: avg_household_size
+  source_id: C_NSO
+  indicator_key: "27327116"
+  theme_group: employment_living_conditions
+  theme: "Ménages et conditions de vie"
+  name: "Nombre moyen de personnes par ménage"
+  unit: "Personnes"
+
+- slug: rudimentary_housing_share
+  source_id: C_NSO
+  indicator_key: "27326816"
+  theme_group: employment_living_conditions
+  theme: "Ménages et conditions de vie"
+  name: "Logements rudimentaires"
+  unit: "Pourcentage"
+
+- slug: first_time_jobseekers
+  source_id: C_NSO
+  indicator_key: "22315516"
+  theme_group: employment_living_conditions
+  theme: Emploi
+  name: "Demandes d'emploi enregistrées - dont première demande"
+  unit: "Nombre"
+
+- slug: employed_agriculture_fishing
+  source_id: C_NSO
+  indicator_key: "40005001"
+  theme_group: employment_living_conditions
+  theme: Emploi
+  name: "Population active occupée - Agriculture et pêche"
+  unit: "Nombre (milliers)"
+
+- slug: employed_manufacturing
+  source_id: C_NSO
+  indicator_key: "40005002"
+  theme_group: employment_living_conditions
+  theme: Emploi
+  name: "Population active occupée - Industries manufacturières"
+  unit: "Nombre (milliers)"
+
+- slug: employed_nonmanufacturing_industry
+  source_id: C_NSO
+  indicator_key: "40005009"
+  theme_group: employment_living_conditions
+  theme: Emploi
+  name: "Population active occupée - Industries non manufacturières"
+  unit: "Nombre (milliers)"
+
+- slug: employed_services
+  source_id: C_NSO
+  indicator_key: "40005012"
+  theme_group: employment_living_conditions
+  theme: Emploi
+  name: "Population active occupée - Services"
+  unit: "Nombre (milliers)"
+
+- slug: employed_undeclared_sector
+  source_id: C_NSO
+  indicator_key: "40005020"
+  theme_group: employment_living_conditions
+  theme: Emploi
+  name: "Population active occupée - secteur non déclaré"
+  unit: "Nombre (milliers)"
+
+- slug: bank_branches_by_governorate
+  source_id: C_NSO
+  indicator_key: "27544679"
+  theme_group: prices_economy
+  theme: "Monnaie et banques"
+  name: "Réseau bancaire par gouvernorat"
+  unit: "Nombre"
+
+- slug: cpi_headline
+  source_id: C_NSO
+  indicator_key: "28229069"
+  theme_group: prices_economy
+  theme: Prix
+  name: "Indice des prix à la consommation familiale (IPC), ensemble"
+  unit: "Indice (2015=100)"
+
+- slug: producer_price_index
+  source_id: C_NSO
+  indicator_key: "27936659"
+  theme_group: prices_economy
+  theme: Prix
+  name: "Indice des prix à la vente industrielle (IPVI), ensemble"
+  unit: "Indice (2010=100)"
+
+- slug: state_revenue_total
+  source_id: C_NSO
+  indicator_key: "28280609"
+  theme_group: prices_economy
+  theme: Budget
+  name: "Total des recettes de l'État (y compris emprunts)"
+  unit: "Milles dinars"
+
+- slug: direct_tax_revenue
+  source_id: C_NSO
+  indicator_key: "28280629"
+  theme_group: prices_economy
+  theme: Budget
+  name: "Impôts directs"
+  unit: "Milles dinars"
+
+- slug: indirect_tax_revenue
+  source_id: C_NSO
+  indicator_key: "28280639"
+  theme_group: prices_economy
+  theme: Budget
+  name: "Impôts indirects"
+  unit: "Milles dinars"
+
+- slug: equipment_budget_own_revenue
+  source_id: C_NSO
+  indicator_key: "28281599"
+  theme_group: prices_economy
+  theme: Budget
+  name: "Recettes propres (budget équipement)"
+  unit: "Milles dinars"
+
+- slug: real_estate_price_change_overall
+  source_id: C_NSO
+  indicator_key: "27995239"
+  theme_group: prices_economy
+  theme: Prix
+  name: "Glissement annuel de l'indice des prix de l'immobilier - ensemble"
+  unit: "Pourcentage"
+
+- slug: real_estate_price_change_apartments
+  source_id: C_NSO
+  indicator_key: "27995219"
+  theme_group: prices_economy
+  theme: Prix
+  name: "Glissement annuel de l'indice des prix de l'immobilier - appartements"
+  unit: "Pourcentage"
+
+- slug: real_estate_price_change_houses
+  source_id: C_NSO
+  indicator_key: "27995229"
+  theme_group: prices_economy
+  theme: Prix
+  name: "Glissement annuel de l'indice des prix de l'immobilier - maisons"
+  unit: "Pourcentage"
+
+- slug: primary_schools_count
+  source_id: C_NSO
+  indicator_key: "22242616"
+  theme_group: education_health
+  theme: Education
+  name: "Nombre d'écoles (cycle primaire public)"
+  unit: "Nombre"
+
+- slug: secondary_establishments_count
+  source_id: C_NSO
+  indicator_key: "22243216"
+  theme_group: education_health
+  theme: Education
+  name: "Nombre d'établissements (cycle secondaire public)"
+  unit: "Nombre"
+
+- slug: general_hospitals_count
+  source_id: C_NSO
+  indicator_key: "22301216"
+  theme_group: education_health
+  theme: Santé
+  name: "Hôpitaux généraux"
+  unit: "Nombre"
+
+- slug: basic_health_centers_count
+  source_id: C_NSO
+  indicator_key: "22301616"
+  theme_group: education_health
+  theme: Santé
+  name: "Centres de santé de base"
+  unit: "Nombre"
+
+- slug: hospital_beds_count
+  source_id: C_NSO
+  indicator_key: "22301016"
+  theme_group: education_health
+  theme: Santé
+  name: "Nombre de lits (secteur public)"
+  unit: "Nombre"
+
+- slug: hospital_beds_per_1000
+  source_id: C_NSO
+  indicator_key: "22301116"
+  theme_group: education_health
+  theme: Santé
+  name: "Lits pour 1000 habitants"
+  unit: "Lits pour 1000 habitants"
+
+- slug: private_clinics_count
+  source_id: C_NSO
+  indicator_key: "22301816"
+  theme_group: education_health
+  theme: Santé
+  name: "Cliniques (secteur privé)"
+  unit: "Nombre"
+
+- slug: inhabitants_per_doctor
+  source_id: C_NSO
+  indicator_key: "27331616"
+  theme_group: education_health
+  theme: Santé
+  name: "Nombre d'habitants pour un médecin"
+  unit: "Nombre"
+
+- slug: inhabitants_per_pharmacist
+  source_id: C_NSO
+  indicator_key: "27331816"
+  theme_group: education_health
+  theme: Santé
+  name: "Nombre d'habitants pour un pharmacien"
+  unit: "Nombre"
+
+- slug: contraceptive_prevalence_rate
+  source_id: C_NSO
+  indicator_key: "22300916"
+  theme_group: education_health
+  theme: Santé
+  name: "Taux de prévalence contraceptive"
+  unit: "Pourcentage"

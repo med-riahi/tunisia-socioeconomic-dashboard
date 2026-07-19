@@ -417,8 +417,25 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-# Ignore all CSVs in interim
+# Ignore all CSVs in interim (the raw per-governorate PDF-extraction scratch
+# files), but keep the indicator-scoring output — it's the Phase 2 evidence
+# for which indicators got picked into config/indicators.yaml.
 data/interim/*.csv
+!data/interim/indicator_scores.csv
 
 # Ignore large files (example)
 *.pdf
+
+# --- Python / this project ---
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.pyc
+dist/
+build/
+.DS_Store
+.env
+.streamlit/secrets.toml

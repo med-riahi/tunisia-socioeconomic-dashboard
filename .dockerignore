@@ -1,0 +1,12 @@
+.venv
+notebooks
+tests
+.git
+.github
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+*.egg-info
+.DS_Store
+data/raw/*.pdf
