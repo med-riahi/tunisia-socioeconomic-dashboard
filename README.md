@@ -14,10 +14,15 @@ and serves the result through a Streamlit app.
 ```
 src/tn_dashboard/
 ├── ins_api/        # low-level client for dataportal.ins.tn + cached catalog
-├── geo/            # governorate/delegation name matching (API/CSV <-> shapefile)
+├── geo/            # governorate/delegation name matching + SVG map projection
 └── etl/            # indicator scoring, dataset build, DuckDB schema
 scripts/run_etl.py  # end-to-end job: API -> data/tunisia.duckdb
-app/streamlit_app.py  # reads ONLY data/tunisia.duckdb, no network calls
+app/
+├── streamlit_app.py    # orchestration only — reads data/tunisia.duckdb, no network calls
+├── data_helpers.py     # pure data-shaping (what to show), unit tested without Streamlit
+├── theme.py            # colors, embedded fonts, HTML component builders
+├── map_component.py    # custom SVG choropleth for st.components.v1.html
+└── assets/fonts/        # subsetted Futura, embedded as base64 (no CDN)
 config/indicators.yaml  # human-curated indicator registry
 tests/              # unit tests against fixed API-response fixtures (no live calls)
 ```
@@ -27,6 +32,26 @@ thing that talks to the INS API and (re)builds `data/tunisia.duckdb`; the
 Streamlit app only ever reads from that file. `data/raw/ins_catalog/*.json`
 caches the INS source/indicator/region catalogs so the pipeline doesn't
 depend on the live server being reachable to run its tests.
+
+### Why a custom map instead of folium
+
+The map is a hand-built SVG choropleth (`tn_dashboard.geo.svg` projects the
+shapefile to path data; `map_component.py` renders it in a sandboxed iframe
+via `st.components.v1.html`), not folium/Leaflet. Leaflet's `fit_bounds()`/
+`zoom_start` turned out to be unreliable inside streamlit-folium's iframe —
+the container size Leaflet sees at init time doesn't match the final
+rendered size, which is exactly the kind of bug a narrow, tall country like
+Tunisia exposes. Plain SVG with `viewBox` sidesteps that entirely and
+renders crisp at any size with no basemap tiles to load.
+
+Every indicator's display adapts to whatever regional granularity it
+actually has (`app/data_helpers.py`): a governorate-level indicator gets
+the map + a trend chart with the two most extreme governorates picked out
+as thin context lines + a full ranking; a national-only indicator (most
+of Prices & Economy, for instance) gets a full-width trend and an explicit
+note instead of a fake or empty map; the one delegation-level dataset (2015
+poverty/dropout, from a PDF, not the API) gets the finer map plus a
+lowest/median/highest distribution card since it has no time series.
 
 ### How indicators were chosen
 

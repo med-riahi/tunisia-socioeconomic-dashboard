@@ -16,6 +16,7 @@ COPY app ./app
 COPY config ./config
 COPY scripts ./scripts
 COPY data ./data
+COPY .streamlit ./.streamlit
 
 EXPOSE 8501
 

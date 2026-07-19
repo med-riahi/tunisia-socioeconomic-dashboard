@@ -1,20 +1,46 @@
 """Tunisia socioeconomic dashboard. Reads only from data/tunisia.duckdb —
 all ETL/network logic lives in tn_dashboard.etl and runs separately
 (scripts/run_etl.py). This file has no INS API calls in it.
+
+Visual design: a custom SVG choropleth (map_component.py) instead of
+folium/Leaflet — crisp at any size, no basemap tiles, and it sidesteps the
+iframe-sizing bugs that made folium unreliable for a narrow, tall country.
+Colors/fonts/card styling live in theme.py; the pure data-shaping logic
+(what to show, not how to draw it) lives in data_helpers.py and is unit
+tested independently of Streamlit.
 """
 
 from __future__ import annotations
 
-import folium
 import geopandas as gpd
 import pandas as pd
-import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
-from streamlit_folium import st_folium
+import streamlit.components.v1 as components
 
+from data_helpers import (
+    coverage_text,
+    distribution,
+    governorate_values,
+    kpi_info,
+    ranking_rows,
+    trend_series,
+)
+from map_component import render_choropleth_html
+from theme import (
+    CARD_CLOSE,
+    COLORS,
+    card_open,
+    distribution_html,
+    kpi_row_html,
+    load_css,
+    masthead_html,
+    ranking_html,
+)
 from tn_dashboard import config
 from tn_dashboard.etl import db
 from tn_dashboard.geo import names
+from tn_dashboard.geo.svg import region_svg_paths
 
 THEME_GROUP_LABELS = {
     "population": "Population & Demographics",
@@ -36,6 +62,7 @@ DELEGATION_MAP_SLUGS = {
 }
 
 st.set_page_config(page_title="Tunisia Socioeconomic Dashboard", layout="wide")
+st.markdown(load_css(), unsafe_allow_html=True)
 
 
 @st.cache_data
@@ -48,102 +75,182 @@ def load_data() -> pd.DataFrame:
 
 
 @st.cache_data
-def load_governorate_shapefile() -> gpd.GeoDataFrame:
+def load_governorate_paths() -> dict[str, str]:
     gdf = gpd.read_file(config.RAW_DIR / "TUN_adm1.shp", encoding="ISO-8859-1")
     gdf = names.add_governorate_column(gdf)
-    return gdf.dissolve(by="Governorate", as_index=False)
+    gdf = gdf.dissolve(by="Governorate", as_index=False)
+    return region_svg_paths(gdf, "Governorate")
 
 
 @st.cache_data
-def load_delegation_shapefile(reference_names: tuple[str, ...]) -> gpd.GeoDataFrame:
+def load_delegation_paths(reference_names: tuple[str, ...]) -> dict[str, str]:
     gdf = gpd.read_file(config.RAW_DIR / "TUN_adm1.shp", encoding="ISO-8859-1")
-    return names.add_delegation_column(gdf, list(reference_names))
+    gdf = names.add_delegation_column(gdf, list(reference_names))
+    gdf = gdf.dropna(subset=["Delegation"])
+    gdf = gdf.dissolve(by="Delegation", as_index=False)
+    return region_svg_paths(gdf, "Delegation", simplify_tolerance=0.004)
 
 
 def indicator_options(df: pd.DataFrame, theme_group: str) -> pd.DataFrame:
     subset = df[df["theme_group"] == theme_group]
-    return subset[["slug", "name", "unit", "theme"]].drop_duplicates().sort_values("name")
+    return subset[["slug", "name", "unit"]].drop_duplicates().sort_values("name")
 
 
-def governorate_agg(df: pd.DataFrame, slug: str, year: int) -> pd.DataFrame:
-    subset = df[(df["slug"] == slug) & (df["year"] == year) & df["governorate"].notna()]
-    return subset.groupby("governorate", as_index=False)["value"].mean()
+def format_value(value: float) -> str:
+    if abs(value) >= 1000:
+        return f"{value:,.0f}"
+    if abs(value) >= 100:
+        return f"{value:,.1f}"
+    if abs(value) >= 10:
+        return f"{value:.1f}"
+    return f"{value:.2f}"
 
 
-def timeseries(df: pd.DataFrame, slug: str) -> tuple[pd.DataFrame, str]:
-    subset = df[df["slug"] == slug]
-    national = subset[subset["region_level"] == "national"]
-    if not national.empty:
-        return national.groupby("year", as_index=False)["value"].mean(), "national"
-    fallback = subset[subset["governorate"].notna()]
-    return fallback.groupby("year", as_index=False)["value"].mean(), "governorate_average"
+def render_kpis(df: pd.DataFrame, slug: str, unit: str) -> None:
+    info = kpi_info(df, slug)
+    cov = coverage_text(df, slug)
 
-
-def render_map(df: pd.DataFrame, slug: str, year: int, unit: str) -> None:
-    if slug in DELEGATION_MAP_SLUGS:
-        subset = df[(df["slug"] == slug) & (df["year"] == year)]
-        ref_names = tuple(sorted(subset["region_name"].unique()))
-        gdf = load_delegation_shapefile(ref_names)
-        merged = gdf.merge(subset, left_on="Delegation", right_on="region_name", how="left")
-        key_on, columns, tooltip_fields, tooltip_aliases = (
-            "feature.properties.Delegation",
-            ["Delegation", "value"],
-            ["Delegation", "value"],
-            ["Delegation:", f"Value ({unit}):"],
-        )
-        st.caption("Delegation-level view.")
+    if info["delta"] is not None:
+        arrow = "▲" if info["delta"] > 0 else ("▼" if info["delta"] < 0 else "—")
+        delta_text = f"{arrow} {format_value(abs(info['delta']))}"
+    elif info["is_national"]:
+        delta_text = "— flat"
     else:
-        agg = governorate_agg(df, slug, year)
-        gdf = load_governorate_shapefile()
-        merged = gdf.merge(agg, left_on="Governorate", right_on="governorate", how="left")
-        key_on, columns, tooltip_fields, tooltip_aliases = (
-            "feature.properties.Governorate",
-            ["Governorate", "value"],
-            ["Governorate", "value"],
-            ["Governorate:", f"Value ({unit}):"],
-        )
-        st.caption(
-            "Governorate-level view (averaged across finer-grained regions where applicable)."
-        )
+        delta_text = "single survey"
 
-    if merged["value"].notna().sum() == 0:
-        st.info("No regional data available for this indicator/year.")
-        return
+    st.markdown(
+        kpi_row_html(format_value(info["value"]), unit, info["year"], delta_text, cov),
+        unsafe_allow_html=True,
+    )
 
-    minx, miny, maxx, maxy = merged.total_bounds
-    center = ((miny + maxy) / 2, (minx + maxx) / 2)
-    # folium's own fit_bounds()/zoom_start are unreliable inside
-    # streamlit-folium's iframe (the size Leaflet sees at init time doesn't
-    # match the final rendered size) — st_folium's own zoom/center kwargs
-    # are the component's documented, reliable way to control the view.
-    m = folium.Map(tiles="cartodbpositron")
-    folium.Choropleth(
-        geo_data=merged,
-        data=merged,
-        columns=columns,
-        key_on=key_on,
-        fill_color="YlOrRd",
-        fill_opacity=0.75,
-        line_opacity=0.3,
-        legend_name=f"{unit}",
-        nan_fill_color="lightgrey",
-    ).add_to(m)
-    folium.GeoJson(
-        merged,
-        tooltip=folium.GeoJsonTooltip(fields=tooltip_fields, aliases=tooltip_aliases),
-        style_function=lambda x: {"fillOpacity": 0, "color": "black", "weight": 0.5},
-    ).add_to(m)
-    st_folium(m, use_container_width=True, height=520, center=center, zoom=6, returned_objects=[])
+
+def render_trend(df: pd.DataFrame, slug: str) -> None:
+    t = trend_series(df, slug)
+    fig = go.Figure()
+    for c in t["context"]:
+        label = f"{c['name']} ({c['tag']})"
+        fig.add_trace(
+            go.Scatter(
+                x=c["series"]["year"], y=c["series"]["value"], mode="lines", name=label,
+                line=dict(color=COLORS["ink_3"], width=1.4), opacity=0.55,
+                hovertemplate="%{y}<extra>" + label + "</extra>",
+            )
+        )
+    tick_font = dict(family="Menlo, monospace", size=10)
+    fig.add_trace(
+        go.Scatter(
+            x=t["primary"]["year"], y=t["primary"]["value"], mode="lines+markers",
+            name=t["primary_label"], marker=dict(size=5),
+            line=dict(color=COLORS["accent"], width=2.75),
+            hovertemplate="%{y}<extra>" + t["primary_label"] + "</extra>",
+        )
+    )
+    fig.update_layout(
+        height=260,
+        margin=dict(l=4, r=4, t=4, b=4),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="-apple-system, sans-serif", color=COLORS["ink_2"], size=12),
+        xaxis=dict(showgrid=False, showline=False, tickfont=tick_font),
+        yaxis=dict(showgrid=True, gridcolor=COLORS["border"], zeroline=False, tickfont=tick_font),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0, font=dict(size=11)),
+        hovermode="x unified",
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+
+
+def render_ranking_card(
+    df: pd.DataFrame, slug: str, year: int | None, val_fmt: str = "{:.1f}"
+) -> None:
+    rows = ranking_rows(df, slug, year)
+    head = card_open("By governorate, ranked", f"n = {len(rows)}")
+    st.markdown(head + ranking_html(rows, val_fmt) + CARD_CLOSE, unsafe_allow_html=True)
+
+
+def render_governorate_panel(df: pd.DataFrame, name: str, slug: str, unit: str) -> None:
+    years = sorted(df[df["slug"] == slug]["year"].unique())
+    year = st.select_slider("Year", options=years, value=years[-1])
+
+    col_map, col_right = st.columns([3, 2])
+    with col_map:
+        values = governorate_values(df, slug, year)
+        paths = load_governorate_paths()
+        st.markdown(card_open(f"{name} by governorate", f"{year} · {unit}"), unsafe_allow_html=True)
+        components.html(render_choropleth_html(paths, values, unit), height=520, scrolling=False)
+        if values:
+            lo, hi = min(values.values()), max(values.values())
+            note = (
+                f'<div class="tn-note">{format_value(lo)} &ndash; '
+                f"{format_value(hi)} {unit}</div>"
+            )
+        else:
+            note = '<div class="tn-note">No regional data for this year.</div>'
+        st.markdown(note, unsafe_allow_html=True)
+        st.markdown(CARD_CLOSE, unsafe_allow_html=True)
+
+    with col_right:
+        st.markdown(card_open("Trend"), unsafe_allow_html=True)
+        render_trend(df, slug)
+        st.markdown(CARD_CLOSE, unsafe_allow_html=True)
+        render_ranking_card(df, slug, year)
+
+
+def render_delegation_panel(df: pd.DataFrame, name: str, slug: str, unit: str) -> None:
+    sub = df[df["slug"] == slug]
+    year = int(sub["year"].iloc[0])
+    ref_names = tuple(sorted(sub["region_name"].dropna().unique()))
+    values = sub.groupby("region_name")["value"].mean().to_dict()
+    paths = load_delegation_paths(ref_names)
+
+    col_map, col_right = st.columns([3, 2])
+    with col_map:
+        st.markdown(card_open(f"{name} by delegation", f"{year} · {unit}"), unsafe_allow_html=True)
+        components.html(render_choropleth_html(paths, values, unit), height=520, scrolling=False)
+        n_matched = len(set(values) & set(paths))
+        st.markdown(
+            f'<div class="tn-note">{n_matched} / {len(values)} delegations matched to map '
+            f"boundaries by name &mdash; the rest render unfilled.</div>",
+            unsafe_allow_html=True,
+        )
+        st.markdown(CARD_CLOSE, unsafe_allow_html=True)
+
+    with col_right:
+        d = distribution(df, slug)
+        st.markdown(card_open("Distribution", "single survey year"), unsafe_allow_html=True)
+        st.markdown(
+            distribution_html(d["lowest"], d["median"], d["highest"]), unsafe_allow_html=True
+        )
+        st.markdown(
+            '<div class="tn-note">Extracted from a 2020 INS PDF report, not the live API '
+            "&mdash; a one-off survey, so there's no time series to chart.</div>",
+            unsafe_allow_html=True,
+        )
+        st.markdown(CARD_CLOSE, unsafe_allow_html=True)
+        render_ranking_card(df, slug, year)
+
+
+def render_national_panel(df: pd.DataFrame, name: str, slug: str, unit: str) -> None:
+    st.markdown(card_open(f"{name} — national trend"), unsafe_allow_html=True)
+    render_trend(df, slug)
+    st.markdown(
+        '<div class="tn-note">Published at national level only &mdash; the source data has '
+        "no regional breakdown for this indicator.</div>",
+        unsafe_allow_html=True,
+    )
+    st.markdown(CARD_CLOSE, unsafe_allow_html=True)
 
 
 def main() -> None:
-    st.title("Tunisia Socioeconomic Dashboard")
-    st.caption(
-        "Data: Institut National de la Statistique (INS) data portal "
-        "+ 2020 INS report (2015 poverty survey)"
-    )
-
     df = load_data()
+
+    st.markdown(
+        masthead_html(
+            "Tunisia Socioeconomic Dashboard",
+            "Population, employment, prices, and health &mdash; by governorate, "
+            "pulled live from the INS data portal.",
+        ),
+        unsafe_allow_html=True,
+    )
 
     with st.sidebar:
         st.header("Filters")
@@ -155,32 +262,15 @@ def main() -> None:
         row = options[options["name"] == indicator_label].iloc[0]
         slug, unit = row["slug"], row["unit"]
 
-        years = sorted(df[df["slug"] == slug]["year"].unique())
-        year = st.select_slider("Year", options=years, value=years[-1])
+    render_kpis(df, slug, unit)
 
-    st.subheader(indicator_label)
-    st.caption(f"Unit: {unit}")
-
-    col_map, col_charts = st.columns([3, 2])
-
-    with col_map:
-        render_map(df, slug, year, unit)
-
-    with col_charts:
-        ts, ts_kind = timeseries(df, slug)
-        ts_label = "National" if ts_kind == "national" else "National (governorate average)"
-        fig_ts = px.line(ts, x="year", y="value", title=f"{ts_label} trend", markers=True)
-        st.plotly_chart(fig_ts, use_container_width=True)
-
-        agg = governorate_agg(df, slug, year)
-        if not agg.empty:
-            agg_sorted = agg.sort_values("value", ascending=False)
-            fig_bar = px.bar(
-                agg_sorted, x="value", y="governorate", orientation="h",
-                title=f"By governorate ({year})",
-            )
-            fig_bar.update_layout(yaxis={"categoryorder": "total ascending"})
-            st.plotly_chart(fig_bar, use_container_width=True)
+    levels = set(df[df["slug"] == slug]["region_level"].unique())
+    if slug in DELEGATION_MAP_SLUGS:
+        render_delegation_panel(df, indicator_label, slug, unit)
+    elif "governorate" in levels:
+        render_governorate_panel(df, indicator_label, slug, unit)
+    else:
+        render_national_panel(df, indicator_label, slug, unit)
 
 
 if __name__ == "__main__":

@@ -22,8 +22,6 @@ dependencies = [
 [project.optional-dependencies]
 app = [
     "streamlit>=1.35",
-    "folium>=0.16",
-    "streamlit-folium>=0.21",
     "plotly>=5.20",
 ]
 dev = [
@@ -45,3 +43,9 @@ extend-exclude = ["notebooks"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# CSS/HTML/JS template strings — wrapping mid-rule hurts readability more
+# than a long line does.
+"app/theme.py" = ["E501"]
+"app/map_component.py" = ["E501"]
