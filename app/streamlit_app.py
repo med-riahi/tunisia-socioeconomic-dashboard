@@ -18,6 +18,7 @@ import plotly.graph_objects as go
 import streamlit as st
 import streamlit.components.v1 as components
 
+from atlas import build_atlas_html
 from data_helpers import (
     coverage_text,
     distribution,
@@ -61,7 +62,9 @@ DELEGATION_MAP_SLUGS = {
     "total_dropout_rate_2015",
 }
 
-st.set_page_config(page_title="Tunisia Socioeconomic Dashboard", layout="wide")
+st.set_page_config(
+    page_title="Tunisia Socioeconomic Dashboard", layout="wide", initial_sidebar_state="collapsed"
+)
 st.markdown(load_css(), unsafe_allow_html=True)
 
 
@@ -240,7 +243,30 @@ def render_national_panel(df: pd.DataFrame, name: str, slug: str, unit: str) -> 
     st.markdown(CARD_CLOSE, unsafe_allow_html=True)
 
 
-def main() -> None:
+def render_atlas() -> None:
+    # Strips Streamlit's default block-container padding/max-width and hides
+    # its header so the cinematic scroll experience runs edge-to-edge inside
+    # the iframe instead of sitting in a padded box within a padded page.
+    # The iframe's declared height (below) only affects Streamlit's own
+    # layout math; forcing it to 100vh here is what actually makes the
+    # opening view fill the whole screen instead of leaving Streamlit's page
+    # background visible beneath a fixed-height box.
+    st.markdown(
+        """
+        <style>
+        .block-container { padding: 0 !important; max-width: 100% !important; }
+        header[data-testid="stHeader"] { background: transparent; }
+        iframe { display: block; height: 100vh !important; }
+        html, body { overflow: hidden; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+    df = load_data()
+    components.html(build_atlas_html(df), height=1000, scrolling=True)
+
+
+def render_classic() -> None:
     df = load_data()
 
     st.markdown(
@@ -271,6 +297,21 @@ def main() -> None:
         render_governorate_panel(df, indicator_label, slug, unit)
     else:
         render_national_panel(df, indicator_label, slug, unit)
+
+
+def main() -> None:
+    with st.sidebar:
+        view = st.radio("View", ["Data Atlas", "Classic Explorer"], index=0)
+        st.caption(
+            "Data Atlas is the cinematic scroll map (population/economy/health "
+            "by governorate). Classic Explorer drills into all 48 indicators "
+            "with trend charts and rankings."
+        )
+
+    if view == "Data Atlas":
+        render_atlas()
+    else:
+        render_classic()
 
 
 if __name__ == "__main__":

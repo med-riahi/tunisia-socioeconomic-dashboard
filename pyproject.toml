@@ -49,3 +49,4 @@ select = ["E", "F", "I", "UP"]
 # than a long line does.
 "app/theme.py" = ["E501"]
 "app/map_component.py" = ["E501"]
+"app/atlas.py" = ["E501"]
