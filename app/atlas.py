@@ -1077,9 +1077,25 @@ let currentTheme = 'population';
 const tooltip = document.getElementById('mapTooltip');
 const RAMP = ['#2a0a0d','#4a1015','#701620','#9c1a1f','#c71f1f','#e63c22','#ff6a2e'];
 
-function colorFor(v, lo, hi) {{
+// Plain linear (v-lo)/(hi-lo) crushes anything skewed — e.g. bank branch
+// counts (15 to 467: Tunis alone is ~30x the smallest governorate) puts
+// every governorate except Tunis in the same one or two darkest ramp
+// steps, reading as "one bright outlier, everything else identical"
+// rather than real variation. Once max/min crosses a 5x ratio, switch to
+// a rank/quantile scale instead: each governorate's color reflects its
+// RANK among all 24, not its raw distance from the extremes, so the ramp
+// always spreads across the full range of governorates regardless of how
+// skewed the underlying counts are. Rate-like indicators (birth rate,
+// hospital beds per 1,000) rarely hit that ratio and keep the linear
+// scale, which is the more honest read when the range is already narrow.
+function colorFor(v, sortedValues, lo, hi, skewed) {{
   if (hi <= lo) return RAMP[Math.floor(RAMP.length/2)];
-  const t = (v - lo) / (hi - lo);
+  let t;
+  if (skewed) {{
+    t = sortedValues.findIndex(x => x >= v) / (sortedValues.length - 1);
+  }} else {{
+    t = (v - lo) / (hi - lo);
+  }}
   return RAMP[Math.max(0, Math.min(RAMP.length-1, Math.round(t * (RAMP.length-1))))];
 }}
 
@@ -1088,12 +1104,14 @@ function paintMap() {{
   const d = PAYLOAD.data[theme.slug];
   const values = Object.values(d.values);
   const lo = Math.min(...values), hi = Math.max(...values);
-  document.getElementById('legendTitle').textContent = d.label + ' · ' + d.year;
+  const skewed = lo > 0 && (hi / lo) > 5;
+  const sortedValues = skewed ? [...values].sort((a, b) => a - b) : null;
+  document.getElementById('legendTitle').textContent = d.label + ' · ' + d.year + (skewed ? ' (by rank)' : '');
   document.getElementById('legendLo').textContent = lo.toLocaleString();
   document.getElementById('legendHi').textContent = hi.toLocaleString();
   dataLayer.querySelectorAll('.region').forEach(function(el) {{
     const v = d.values[el.dataset.gov];
-    el.setAttribute('fill', v !== undefined ? colorFor(v, lo, hi) : '#1a1f29');
+    el.setAttribute('fill', v !== undefined ? colorFor(v, sortedValues, lo, hi, skewed) : '#1a1f29');
     el.dataset.value = v !== undefined ? v : '';
   }});
 }}
