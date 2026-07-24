@@ -35,6 +35,7 @@ from __future__ import annotations
 import base64
 import json
 import math
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -266,6 +267,16 @@ def _official_star_points(cx, cy, r, start_angle_deg=180):
     return pts
 
 
+def _path_bbox(d: str) -> tuple[float, float, float, float]:
+    """min/max x/y directly from an SVG path's coordinate pairs — good
+    enough for sizing an overlay (a sweep band, a glow), not for anything
+    that needs to handle curves precisely."""
+    pts = re.findall(r"(-?\d+\.?\d*),(-?\d+\.?\d*)", d)
+    xs = [float(x) for x, _ in pts]
+    ys = [float(y) for _, y in pts]
+    return min(xs), min(ys), max(xs), max(ys)
+
+
 def _radar_sweep_svg(cx: float, cy: float, r: float, arc_deg: float = 55, n: int = 18) -> str:
     """A rotating "sweep beam" out of thin radial lines with decreasing
     opacity from leading to trailing edge — SVG has no conic-gradient to
@@ -345,6 +356,38 @@ def _national_stats(data: dict) -> dict:
     return out
 
 
+def _build_national_intro_cards(total_population: float | None, pop_year: int | None, gov_count: int) -> list[dict]:
+    """The "national dossier" cards shown once the zoom settles on Tunisia,
+    before the regional explorer takes over — population and governorate
+    count come from the same INS-sourced `data` the rest of the app reads;
+    capital/area/independence/government are standard reference facts, not
+    INS figures (the credit line under the cards says so explicitly — see
+    the observatoire's transparency framing elsewhere in this file).
+
+    Anchor/node/top are hand-placed screen-percentage coordinates (a 0-100
+    x 0-100 overlay stretched over the whole viewport with
+    preserveAspectRatio="none", so they read as literal percentages) —
+    tuned to sit just off Tunisia's own silhouette at the resting zoom,
+    three cards flanking each side like a movie target dossier.
+    """
+    pop_display = f"{total_population / 1e6:.1f}M" if total_population else "—"
+    pop_sub = f"{pop_year} · INS data portal" if pop_year else "INS data portal"
+
+    raw = [
+        {"label": "Population", "value": pop_display, "sub": pop_sub, "side": "left", "top": 24, "ax": 41, "ay": 26},
+        {"label": "Capital", "value": "Tunis", "sub": "largest city", "side": "left", "top": 50, "ax": 37, "ay": 52},
+        {"label": "Independence", "value": "20 Mar 1956", "sub": "from France", "side": "left", "top": 76, "ax": 41, "ay": 80},
+        {"label": "Governorates", "value": str(gov_count), "sub": "administrative divisions", "side": "right", "top": 24, "ax": 61, "ay": 26},
+        {"label": "Area", "value": "163,610 km²", "sub": "Mediterranean coastline", "side": "right", "top": 50, "ax": 64, "ay": 52},
+        {"label": "Government", "value": "Unitary Republic", "sub": "semi-presidential system", "side": "right", "top": 76, "ax": 61, "ay": 80},
+    ]
+    for card in raw:
+        card["nx"] = 22.0 if card["side"] == "left" else 78.0
+        card["ny"] = float(card["top"])
+        card["line_len"] = round(math.hypot(card["nx"] - card["ax"], card["ny"] - card["ay"]), 2)
+    return raw
+
+
 def build_atlas_html(df: pd.DataFrame) -> str:
     """Returns the full self-contained Atlas HTML document, ready to hand to
     st.components.v1.html. ``df`` is the same tidy indicators frame the rest
@@ -365,6 +408,12 @@ def build_atlas_html(df: pd.DataFrame) -> str:
 
     data = _theme_data(df)
     national_stats = _national_stats(data)
+
+    pop = data.get("population_jan1", {})
+    total_population = sum(pop["values"].values()) if pop.get("values") else None
+    NATIONAL_INTRO_CARDS = _build_national_intro_cards(
+        total_population, pop.get("year"), len(geo["gov_paths"])
+    )
 
     W, H = geo["viewbox_w"], geo["viewbox_h"]
     GOV_PATHS = geo["gov_paths"]
@@ -455,8 +504,15 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
    nothing and making the whole transition feel like it snapped shut after
    a couple of scroll gestures instead of unfolding gradually. More runway
    fixes that without changing anything about what each scroll fraction
-   shows. */
-.scroll-spacer {{ height: 340vh; }}
+   shows.
+
+   340vh -> 520vh: added a third act. The scroll now runs three phases in
+   sequence — Mediterranean-to-Tunisia zoom, then the national dossier
+   (overview cards on leader lines), then the reveal into the regional
+   explorer — each with its own dedicated scroll distance (see ZOOM_END /
+   OVERVIEW_END in the script below) instead of cramming the new phase
+   into the old zoom's tail. */
+.scroll-spacer {{ height: 520vh; }}
 
 .hero {{
   position: sticky; top: 0; height: 100vh;
@@ -578,6 +634,43 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
   color: var(--ink-3); text-align: center; margin-top: 6px;
 }}
 
+/* National dossier: population/capital/independence/area/etc. cards that
+   appear once the zoom settles on Tunisia, each wired to a point on the
+   country's own silhouette by a leader line — a movie-HUD "target
+   analysis" beat between the establishing zoom and the regional
+   explorer. Opacity and each line's stroke-dashoffset are driven
+   entirely from JS (onScroll), not CSS transitions/animations, since
+   they have to track scroll position exactly, not run on a clock. */
+.overview-layer {{ position: absolute; inset: 0; z-index: 4; opacity: 0; pointer-events: none; }}
+.overview-lines {{ position: absolute; inset: 0; width: 100%; height: 100%; }}
+.ov-line {{
+  stroke: var(--hud); stroke-width: 0.18; fill: none;
+  filter: drop-shadow(0 0 1.5px var(--hud));
+}}
+.ov-node {{ fill: var(--hud); filter: drop-shadow(0 0 2px var(--hud)); }}
+.ov-card {{
+  position: absolute; transform: translateY(-50%); width: 19%;
+  font-family: "IBM Plex Mono", monospace;
+}}
+.ov-card.left {{ left: 3%; text-align: left; }}
+.ov-card.right {{ right: 3%; text-align: right; }}
+.ov-card-inner {{
+  opacity: 0; background: rgba(9,17,22,0.68); backdrop-filter: blur(6px);
+  border: 1px solid var(--hud-dim); border-radius: 8px; padding: 10px 14px;
+  box-shadow: 0 0 16px rgba(75,232,255,0.08);
+}}
+.ov-card-label {{
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--hud); opacity: 0.8; margin-bottom: 4px;
+}}
+.ov-card-value {{ font-size: 19px; font-weight: 600; color: var(--ink); }}
+.ov-card-sub {{ font-size: 10.5px; color: var(--ink-2); margin-top: 2px; }}
+.ov-credit {{
+  position: absolute; left: 50%; bottom: 3%; transform: translateX(-50%);
+  max-width: 480px; text-align: center; font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; color: var(--ink-3); line-height: 1.5;
+}}
+
 .map-canvas-wrap {{ position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; }}
 svg.atlas-map {{ width: 100%; height: 100%; }}
 .hud-grid {{ opacity: 0.55; }}
@@ -645,13 +738,29 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
 /* Tunisia itself glows too (the country shape, the disc, the crescent,
    the star) — simple, low-point-count geometry, so a proper filter here
    is cheap even though it wasn't on the coastline above. Red, not cyan:
-   this is the target, not the instrument reading it. Pulses continuously
-   like a radar contact, not just a static drop-shadow — that "static"
-   version was too subtle to register as "glowing" at all. */
-#flagLayer {{ animation: flagGlowPulse 2.6s ease-in-out infinite; }}
-@keyframes flagGlowPulse {{
-  0%, 100% {{ filter: drop-shadow(0 0 3px var(--red)) drop-shadow(0 0 9px var(--red-glow)); }}
-  50% {{ filter: drop-shadow(0 0 7px var(--red)) drop-shadow(0 0 22px var(--red-glow)); }}
+   this is the target, not the instrument reading it.
+
+   Trying essay "D — Contour Echo" (one of six live options shown in an
+   artifact) here: the country's own outline expands outward past its
+   real border and fades, on repeat — ripples reading off the actual
+   shape rather than a generic dot or glow. #flagEcho sits BEHIND
+   #flagLayer in the DOM (painted first) and, unlike #flagLayer, is
+   *not* clipped to #countryClip — the whole point is the rings
+   escaping past the coastline into the surrounding sea; the solid
+   flag fill on top hides the part of each ring still inside the
+   border. */
+#flagLayer {{ filter: drop-shadow(0 0 3px var(--red)) drop-shadow(0 0 9px var(--red-glow)); }}
+.echo-ring {{
+  fill: none; stroke: var(--red); stroke-width: 1.6; opacity: 0;
+  transform-box: fill-box; transform-origin: 50% 50%;
+  filter: drop-shadow(0 0 3px var(--red));
+  animation: echoRing 2.8s ease-out infinite;
+}}
+.echo-ring.r2 {{ animation-delay: 0.93s; }}
+.echo-ring.r3 {{ animation-delay: 1.86s; }}
+@keyframes echoRing {{
+  0% {{ transform: scale(1); opacity: 0.7; }}
+  100% {{ transform: scale(1.35); opacity: 0; }}
 }}
 
 /* Acquisition HUD: crosshair + expanding rings + a rotating sweep beam,
@@ -900,6 +1009,11 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
         <path class="land-fill" d="{OTHER_LAND_PATH}"/>
         <path class="land-glow" d="{OTHER_LAND_PATH}"/>
         {"".join(f'<text class="land-label" x="{lbl["x"]}" y="{lbl["y"]}">{lbl["name"]}</text>' for lbl in LAND_LABELS)}
+        <g id="flagEcho">
+          <path class="echo-ring" d="{COUNTRY_PATH}"/>
+          <path class="echo-ring r2" d="{COUNTRY_PATH}"/>
+          <path class="echo-ring r3" d="{COUNTRY_PATH}"/>
+        </g>
         <g id="flagLayer" clip-path="url(#countryClip)">
           <path d="{COUNTRY_PATH}" fill="#c8102e"/>
           <circle cx="{flag_cx}" cy="{flag_cy}" r="{flag_r}" fill="#fdfdfb"/>
@@ -919,14 +1033,37 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
             <line x1="{flag_cx}" y1="{flag_cy-CROSSHAIR_TICK}" x2="{flag_cx}" y2="{flag_cy-CROSSHAIR_R}"/>
             <line x1="{flag_cx}" y1="{flag_cy+CROSSHAIR_R}" x2="{flag_cx}" y2="{flag_cy+CROSSHAIR_TICK}"/>
           </g>
-          <text class="hud-readout" x="{flag_cx+CROSSHAIR_TICK+4}" y="{flag_cy-6}">TN · REPUBLIC OF TUNISIA</text>
-          <text class="hud-readout" x="{flag_cx+CROSSHAIR_TICK+4}" y="{flag_cy+4}">{COORD_READOUT}</text>
+          <g id="hudReadout">
+            <text class="hud-readout" x="{flag_cx+CROSSHAIR_TICK+4}" y="{flag_cy-6}">TN · REPUBLIC OF TUNISIA</text>
+            <text class="hud-readout" x="{flag_cx+CROSSHAIR_TICK+4}" y="{flag_cy+4}">{COORD_READOUT}</text>
+          </g>
         </g>
         <g id="dataLayer" clip-path="url(#countryClip)" opacity="0">
           {"".join(f'<path class="region" data-gov="{g}" d="{d}"></path>' for g, d in GOV_PATHS.items())}
         </g>
         <path id="countryOutline" d="{COUNTRY_PATH}"/>
       </svg>
+    </div>
+    <div class="overview-layer" id="overviewLayer">
+      <svg class="overview-lines" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        {"".join(
+            f'<circle class="ov-node" cx="{c["ax"]}" cy="{c["ay"]}" r="0.5"/>'
+            f'<line id="ovLine{i}" class="ov-line" x1="{c["ax"]}" y1="{c["ay"]}" x2="{c["nx"]}" y2="{c["ny"]}" '
+            f'stroke-dasharray="{c["line_len"]}" stroke-dashoffset="{c["line_len"]}"/>'
+            f'<circle class="ov-node" cx="{c["nx"]}" cy="{c["ny"]}" r="0.5"/>'
+            for i, c in enumerate(NATIONAL_INTRO_CARDS)
+        )}
+      </svg>
+      {"".join(
+          f'<div class="ov-card {c["side"]}" style="top:{c["top"]}%;">'
+          f'<div class="ov-card-inner" id="ovCard{i}">'
+          f'<div class="ov-card-label">{c["label"]}</div>'
+          f'<div class="ov-card-value">{c["value"]}</div>'
+          f'<div class="ov-card-sub">{c["sub"]}</div>'
+          f'</div></div>'
+          for i, c in enumerate(NATIONAL_INTRO_CARDS)
+      )}
+      <div class="ov-credit">Population &amp; governorate count: INS data portal. Other figures: standard geographic/historical reference, not INS-sourced.</div>
     </div>
     <div class="locator show" id="locator">
       <svg viewBox="0 0 {africa["viewbox_w"]} {africa["viewbox_h"]}" xmlns="http://www.w3.org/2000/svg">
@@ -1040,6 +1177,31 @@ const dataLayer = document.getElementById('dataLayer');
 const countryOutline = document.getElementById('countryOutline');
 const topbar = document.getElementById('topbar');
 const legend = document.getElementById('legend');
+const overviewLayer = document.getElementById('overviewLayer');
+const hudReadout = document.getElementById('hudReadout');
+const OV_COUNT = {len(NATIONAL_INTRO_CARDS)};
+const OV_LINES = [], OV_CARDS_EL = [];
+for (let i = 0; i < OV_COUNT; i++) {{
+  OV_LINES.push(document.getElementById('ovLine' + i));
+  OV_CARDS_EL.push(document.getElementById('ovCard' + i));
+}}
+// Each card gets its own slice of the overview phase: line draws in first
+// (start to start+0.09), card fades in right after (start+0.05 to
+// start+0.15) — the small overlap is deliberate, so the card doesn't sit
+// waiting on a fully-drawn line before it starts appearing.
+function updateOverview(overviewP, revealP) {{
+  const layerOpacity = Math.max(0, Math.min(1, overviewP / 0.08) - revealP);
+  overviewLayer.style.opacity = String(layerOpacity);
+  overviewLayer.style.pointerEvents = layerOpacity > 0.05 ? 'auto' : 'none';
+  for (let i = 0; i < OV_COUNT; i++) {{
+    const start = i * 0.12;
+    const lineP = Math.max(0, Math.min(1, (overviewP - start) / 0.09));
+    const cardP = Math.max(0, Math.min(1, (overviewP - start - 0.05) / 0.1));
+    const len = parseFloat(OV_LINES[i].getAttribute('stroke-dasharray'));
+    OV_LINES[i].style.strokeDashoffset = String(len * (1 - lineP));
+    OV_CARDS_EL[i].style.opacity = String(cardP);
+  }}
+}}
 
 function lerp(a, b, t) {{ return a + (b - a) * t; }}
 // Zoom is perceived as a RATIO, not a pixel distance — halving the visible
@@ -1081,17 +1243,22 @@ function onScroll() {{
 
   const releaseScroll = spacer.offsetHeight - window.innerHeight;
   const p = Math.max(0, Math.min(1, effectiveScrollY / (releaseScroll * 0.92)));
-  // Zoom now uses the entire scroll range (was p/0.75, which finished the
-  // whole zoom in ~4 scroll ticks and then left 25% of the scroll as dead
-  // space before the UI reveal even started). Reveal is now a short overlay
-  // near the very end instead of a separate late-scroll phase.
-  // No easing curve here on top of the exponential width scaling — an
-  // S-curve easing plus an already-exponential zoom compound into an even
-  // steeper middle section, which is the opposite of what's needed. Plain
-  // linear p, paired with expLerp above, is what actually gives an even
-  // ratio-per-scroll-tick feel.
-  const zoomP = p;
-  const revealP = Math.max(0, Math.min(1, (p - 0.86) / 0.14));
+  // Three acts across the one scroll range, each with its own dedicated
+  // slice instead of the old two-phase zoom-then-reveal: zoom (0 to
+  // ZOOM_END), the national dossier cards (ZOOM_END to OVERVIEW_END,
+  // held at the fully-zoomed viewBox throughout), then the reveal into
+  // the regional explorer (OVERVIEW_END to 1). zoomP saturates at 1 once
+  // p passes ZOOM_END, so the viewBox just sits at TUNISIA_VB for the
+  // rest of the scroll rather than continuing to move.
+  // No easing curve on top of the exponential width scaling within the
+  // zoom act — an S-curve easing plus an already-exponential zoom
+  // compound into an even steeper middle section, which is the opposite
+  // of what's needed. Plain linear zoomP, paired with expLerp above, is
+  // what actually gives an even ratio-per-scroll-tick feel.
+  const ZOOM_END = 0.5, OVERVIEW_END = 0.85;
+  const zoomP = Math.max(0, Math.min(1, p / ZOOM_END));
+  const overviewP = Math.max(0, Math.min(1, (p - ZOOM_END) / (OVERVIEW_END - ZOOM_END)));
+  const revealP = Math.max(0, Math.min(1, (p - OVERVIEW_END) / (1 - OVERVIEW_END)));
 
   const vbW = expLerp(FULL_VB[2], TUNISIA_VB[2], zoomP);
   const vbH = vbW / expLerp(FULL_ASPECT, TUNISIA_ASPECT, zoomP);
@@ -1100,14 +1267,21 @@ function onScroll() {{
   const vb = [cx - vbW/2, cy - vbH/2, vbW, vbH];
   svg.setAttribute('viewBox', vb.join(' '));
 
-  document.getElementById('locator').style.opacity = String(Math.max(0, 1 - p / 0.2));
+  document.getElementById('locator').style.opacity = String(Math.max(0, 1 - zoomP / 0.2));
 
   flagLayer.setAttribute('opacity', String(1 - revealP));
   acquisitionHud.setAttribute('opacity', String(1 - revealP));
   dataLayer.setAttribute('opacity', String(revealP));
   countryOutline.style.opacity = String(0.3 + revealP*0.7);
+  updateOverview(overviewP, revealP);
+  // The crosshair's own "TN · REPUBLIC OF TUNISIA" / coordinate readout
+  // collided with the dossier cards once they started appearing — and is
+  // redundant with them anyway (both are "here's what this target is"),
+  // so it fades out fast right as the overview phase begins rather than
+  // sticking around for the whole thing like the rest of #acquisitionHud.
+  hudReadout.style.opacity = String(Math.max(0, 1 - overviewP * 4));
 
-  const uiVisible = p > 0.93;
+  const uiVisible = revealP > 0.5;
   topbar.classList.toggle('show', uiVisible);
   legend.classList.toggle('show', uiVisible);
   document.getElementById('kpiStrip').classList.toggle('show', uiVisible);
