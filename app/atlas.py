@@ -241,8 +241,12 @@ def _static_assets() -> dict:
     return {
         "cairo_latin_b64": _b64(ASSETS_DIR / "fonts" / "elmessiri_latin.woff2"),
         "cairo_arabic_b64": _b64(ASSETS_DIR / "fonts" / "elmessiri_arabic.woff2"),
-        "reemkufi_b64": _b64(ASSETS_DIR / "fonts" / "reemkufi_hud.woff2"),
-        "orbitron_b64": _b64(ASSETS_DIR / "fonts" / "orbitron_hud.woff2"),
+        "plex_mono_regular_b64": _b64(ASSETS_DIR / "fonts" / "IBMPlexMono-Regular.woff2"),
+        "plex_mono_semibold_b64": _b64(ASSETS_DIR / "fonts" / "IBMPlexMono-SemiBold.woff2"),
+        "plex_mono_bold_b64": _b64(ASSETS_DIR / "fonts" / "IBMPlexMono-Bold.woff2"),
+        "plex_ar_regular_b64": _b64(ASSETS_DIR / "fonts" / "IBMPlexSansArabic-Regular.woff2"),
+        "plex_ar_semibold_b64": _b64(ASSETS_DIR / "fonts" / "IBMPlexSansArabic-SemiBold.woff2"),
+        "plex_ar_bold_b64": _b64(ASSETS_DIR / "fonts" / "IBMPlexSansArabic-Bold.woff2"),
         "coat_b64": (ASSETS_DIR / "coat_of_arms.b64").read_text().strip(),
         "geo": geo,
         "africa": africa,
@@ -348,8 +352,12 @@ def build_atlas_html(df: pd.DataFrame) -> str:
     assets = _static_assets()
     cairo_latin_b64 = assets["cairo_latin_b64"]
     cairo_arabic_b64 = assets["cairo_arabic_b64"]
-    orbitron_b64 = assets["orbitron_b64"]
-    reemkufi_b64 = assets["reemkufi_b64"]
+    plex_mono_regular_b64 = assets["plex_mono_regular_b64"]
+    plex_mono_semibold_b64 = assets["plex_mono_semibold_b64"]
+    plex_mono_bold_b64 = assets["plex_mono_bold_b64"]
+    plex_ar_regular_b64 = assets["plex_ar_regular_b64"]
+    plex_ar_semibold_b64 = assets["plex_ar_semibold_b64"]
+    plex_ar_bold_b64 = assets["plex_ar_bold_b64"]
     coat_b64 = assets["coat_b64"]
     geo = assets["geo"]
     africa = assets["africa"]
@@ -399,13 +407,19 @@ def build_atlas_html(df: pd.DataFrame) -> str:
 <style>
 @font-face {{ font-family: "El Messiri"; src: url(data:font/woff2;base64,{cairo_latin_b64}) format("woff2-variations"), url(data:font/woff2;base64,{cairo_latin_b64}) format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0000-024F,U+2000-206F,U+2122; }}
 @font-face {{ font-family: "El Messiri"; src: url(data:font/woff2;base64,{cairo_arabic_b64}) format("woff2-variations"), url(data:font/woff2;base64,{cairo_arabic_b64}) format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0600-06FF,U+200C-200F,U+FEFF; }}
-@font-face {{ font-family: "Orbitron HUD"; src: url(data:font/woff2;base64,{orbitron_b64}) format("woff2-variations"), url(data:font/woff2;base64,{orbitron_b64}) format("woff2"); font-weight: 400 900; font-display: swap; }}
-/* Reem Kufi: a modern text revival of Kufic script — Kufic's native
-   geometry (angular, squared-off strokes) already reads as "technical"
-   the way Latin geometric sans faces do, without inventing a fake
-   futuristic treatment on top of Arabic letterforms. Pairs with Orbitron
-   for the Latin/digital side of the same HUD language. */
-@font-face {{ font-family: "Reem Kufi HUD"; src: url(data:font/woff2;base64,{reemkufi_b64}) format("woff2-variations"), url(data:font/woff2;base64,{reemkufi_b64}) format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0600-06FF,U+200C-200F,U+FEFF; }}
+/* IBM Plex Mono + IBM Plex Sans Arabic: one designed type system across
+   both scripts (part of the IBM Plex superfamily) rather than two
+   display faces picked separately and paired by eye — trades the
+   previous Orbitron/Reem Kufi "sci-fi display" register for more of an
+   "engineering console" one. Neither family ships as a variable font, so
+   each weight actually used is its own static file/@font-face instead of
+   one variable-range declaration. */
+@font-face {{ font-family: "IBM Plex Mono"; src: url(data:font/woff2;base64,{plex_mono_regular_b64}) format("woff2"); font-weight: 400; font-display: swap; }}
+@font-face {{ font-family: "IBM Plex Mono"; src: url(data:font/woff2;base64,{plex_mono_semibold_b64}) format("woff2"); font-weight: 600; font-display: swap; }}
+@font-face {{ font-family: "IBM Plex Mono"; src: url(data:font/woff2;base64,{plex_mono_bold_b64}) format("woff2"); font-weight: 700 900; font-display: swap; }}
+@font-face {{ font-family: "IBM Plex Sans Arabic"; src: url(data:font/woff2;base64,{plex_ar_regular_b64}) format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0600-06FF,U+200C-200F,U+FEFF; }}
+@font-face {{ font-family: "IBM Plex Sans Arabic"; src: url(data:font/woff2;base64,{plex_ar_semibold_b64}) format("woff2"); font-weight: 600; font-display: swap; unicode-range: U+0600-06FF,U+200C-200F,U+FEFF; }}
+@font-face {{ font-family: "IBM Plex Sans Arabic"; src: url(data:font/woff2;base64,{plex_ar_bold_b64}) format("woff2"); font-weight: 700; font-display: swap; unicode-range: U+0600-06FF,U+200C-200F,U+FEFF; }}
 
 :root {{
   --bg: #05070b;
@@ -433,7 +447,7 @@ def build_atlas_html(df: pd.DataFrame) -> str:
    there's nothing to clip in the first place. */
 html, body {{ margin: 0; padding: 0; background: var(--bg); }}
 body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif; color: var(--ink); }}
-[lang="ar"], .ar {{ direction: rtl; font-family: "Reem Kufi HUD", "El Messiri", sans-serif; }}
+[lang="ar"], .ar {{ direction: rtl; font-family: "IBM Plex Sans Arabic", "El Messiri", sans-serif; }}
 
 /* 220vh made the zoom-to-Tunisia complete by ~58% of the total scrollable
    distance (measured directly: viewBox stopped changing well before the
@@ -488,17 +502,17 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
   filter: drop-shadow(0 0 3px var(--hud)) drop-shadow(0 0 8px var(--hud-dim));
 }}
 .terminal-title-en {{
-  font-family: "Orbitron HUD", monospace; font-weight: 800;
+  font-family: "IBM Plex Mono", monospace; font-weight: 800;
   font-size: clamp(40px, 6.5vw, 92px); letter-spacing: 0.04em; line-height: 0.95;
   color: var(--hud); text-shadow: 0 0 10px var(--hud-dim), 0 0 28px rgba(75,232,255,0.35);
 }}
 .terminal-title-tag {{
-  font-family: "Orbitron HUD", monospace; font-size: 12.5px; letter-spacing: 0.14em;
+  font-family: "IBM Plex Mono", monospace; font-size: 12.5px; letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--hud); opacity: 0.7; margin-top: 8px;
 }}
 .terminal-subline {{ display: flex; align-items: baseline; gap: 22px; margin-top: 16px; }}
 .terminal-subline .fr {{
-  font-family: "Orbitron HUD", monospace; font-size: 12.5px; font-weight: 600; letter-spacing: 0.16em;
+  font-family: "IBM Plex Mono", monospace; font-size: 12.5px; font-weight: 600; letter-spacing: 0.16em;
   text-transform: uppercase; color: var(--hud); opacity: 0.75;
 }}
 .terminal-subline .ar {{ font-size: 17px; color: var(--hud); opacity: 0.75; }}
@@ -535,7 +549,7 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
 #pacmanIcon.done .face-happy {{ opacity: 1; }}
 
 .terminal-lines {{
-  font-family: "Orbitron HUD", monospace; font-size: clamp(13px, 2vw, 20px);
+  font-family: "IBM Plex Mono", monospace; font-size: clamp(13px, 2vw, 20px);
   color: var(--hud); letter-spacing: 0.09em; text-align: left; min-height: 4.2em;
 }}
 .terminal-line {{ line-height: 2; text-shadow: 0 0 8px var(--hud-dim); }}
@@ -546,7 +560,7 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
 }}
 @keyframes cursorBlink {{ 0%, 50% {{ opacity: 1; }} 51%, 100% {{ opacity: 0; }} }}
 .terminal-hint {{
-  position: absolute; bottom: 8vh; font-family: "Orbitron HUD", monospace; font-size: 11px;
+  position: absolute; bottom: 8vh; font-family: "IBM Plex Mono", monospace; font-size: 11px;
   letter-spacing: 0.24em; color: var(--hud); opacity: 0; text-transform: uppercase;
   transition: opacity 600ms ease; text-align: center;
 }}
@@ -585,12 +599,12 @@ svg.atlas-map {{ width: 100%; height: 100%; }}
   filter: drop-shadow(0 0 1.4px var(--hud)) drop-shadow(0 0 3.5px var(--hud-dim));
 }}
 .sea-label {{
-  fill: var(--hud); font-family: "Orbitron HUD", Menlo, monospace; font-weight: 700;
+  fill: var(--hud); font-family: "IBM Plex Mono", Menlo, monospace; font-weight: 700;
   font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.65;
   text-anchor: middle; text-shadow: 0 0 5px var(--hud-dim);
 }}
 .land-label {{
-  fill: var(--hud); font-family: "Orbitron HUD", Menlo, monospace; font-weight: 700; font-size: 8px;
+  fill: var(--hud); font-family: "IBM Plex Mono", Menlo, monospace; font-weight: 700; font-size: 8px;
   letter-spacing: 0.1em; text-transform: uppercase; text-anchor: middle; opacity: 0.72;
   text-shadow: 0 0 4px var(--hud-dim);
 }}
@@ -671,7 +685,7 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
   filter: drop-shadow(0 0 1.5px var(--hud));
 }}
 .hud-readout {{
-  fill: var(--hud); font-family: "Orbitron HUD", Menlo, monospace; font-weight: 600; font-size: 6.4px;
+  fill: var(--hud); font-family: "IBM Plex Mono", Menlo, monospace; font-weight: 600; font-size: 6.4px;
   letter-spacing: 0.07em; opacity: 0.88; text-shadow: 0 0 4px var(--hud-dim);
   /* A rare, brief stutter — signal-interference flavor, not constant
      noise. 7s cycle, glitching for well under a second of it, so it reads
@@ -698,7 +712,7 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
 .brand {{ display: flex; align-items: center; gap: 12px; }}
 .brand img {{ width: 24px; height: auto; opacity: 0.9; filter: drop-shadow(0 0 3px var(--hud-dim)); }}
 .brand-text {{
-  font-family: "Orbitron HUD", monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.16em;
+  font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.16em;
   text-transform: uppercase; color: var(--hud); text-shadow: 0 0 6px var(--hud-dim);
 }}
 .theme-switch {{
@@ -706,7 +720,7 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
   border-radius: 10px; padding: 4px; box-shadow: 0 0 12px rgba(75,232,255,0.08);
 }}
 .theme-btn {{
-  font-family: "Orbitron HUD", monospace; font-size: 12px; font-weight: 600; color: var(--ink-2);
+  font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600; color: var(--ink-2);
   background: transparent; border: none; border-radius: 7px; padding: 8px 16px; cursor: pointer;
   transition: all 150ms ease; letter-spacing: 0.05em; text-transform: uppercase;
 }}
@@ -715,7 +729,7 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
 
 .legend {{
   position: fixed; left: 34px; bottom: 28px; z-index: 4; display: flex; flex-direction: column; gap: 8px;
-  font-family: "Orbitron HUD", monospace; font-size: 10px; color: var(--ink-3);
+  font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--ink-3);
   opacity: 0; transition: opacity 200ms ease; pointer-events: none;
   background: rgba(9,22,26,0.55); border: 1px solid var(--hud-dim); border-radius: 8px;
   padding: 12px 16px; backdrop-filter: blur(6px);
@@ -745,15 +759,15 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
   box-shadow: 0 6px 24px rgba(0,0,0,0.35), 0 0 14px rgba(75,232,255,0.06);
 }}
 .kpi-card-label {{
-  font-family: "Orbitron HUD", monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: "IBM Plex Mono", monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--hud); opacity: 0.75; margin-bottom: 5px;
 }}
 .kpi-card-value {{
-  font-family: "Orbitron HUD", monospace; font-weight: 700; font-size: 21px; color: var(--ink);
+  font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 21px; color: var(--ink);
   font-variant-numeric: tabular-nums; white-space: nowrap;
 }}
 .kpi-card-value .unit {{ font-size: 10px; color: var(--ink-2); font-weight: 400; margin-left: 4px; }}
-.kpi-card-value .sub {{ display: block; font-family: "Orbitron HUD", monospace; font-size: 11px; font-weight: 400; color: var(--gold); margin-top: 2px; }}
+.kpi-card-value .sub {{ display: block; font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 400; color: var(--gold); margin-top: 2px; }}
 
 .map-tooltip {{
   position: fixed; pointer-events: none; background: var(--bg-3); border: 1px solid var(--border);
@@ -792,28 +806,28 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
 .panel-content {{ padding: 20px 28px 30px; }}
 .panel-name-ar {{ font-size: 24px; margin-bottom: 4px; color: var(--hud); text-shadow: 0 0 8px var(--hud-dim); }}
 .panel-name-en {{
-  font-family: "Orbitron HUD", monospace; font-weight: 700; font-size: 26px; line-height: 1.1;
+  font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 26px; line-height: 1.1;
   text-shadow: 0 0 10px var(--hud-dim);
 }}
 .panel-name-fr {{
-  font-family: "Orbitron HUD", monospace; font-size: 11.5px; color: var(--hud); letter-spacing: 0.1em;
+  font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--hud); letter-spacing: 0.1em;
   text-transform: uppercase; margin-top: 6px; opacity: 0.8;
 }}
 .panel-about {{ margin-top: 16px; font-size: 13px; line-height: 1.65; color: var(--ink-2); }}
 .panel-kpi {{ margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--hud-dim); }}
 .panel-kpi-label {{
-  font-family: "Orbitron HUD", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--hud); opacity: 0.75; margin-bottom: 6px;
 }}
 .panel-kpi-value {{
-  font-family: "Orbitron HUD", monospace; font-weight: 700; font-size: 36px; color: var(--red);
+  font-family: "IBM Plex Mono", monospace; font-weight: 700; font-size: 36px; color: var(--red);
   text-shadow: 0 0 12px var(--red-glow);
 }}
 .panel-kpi-unit {{ font-size: 13px; color: var(--ink-2); margin-left: 6px; }}
-.panel-rank {{ font-family: "Orbitron HUD", monospace; font-size: 10.5px; color: var(--hud); opacity: 0.8; margin-top: 8px; }}
+.panel-rank {{ font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--hud); opacity: 0.8; margin-top: 8px; }}
 .panel-insight {{ margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--hud-dim); font-size: 13px; line-height: 1.65; color: var(--ink-2); }}
 .panel-insight-label {{
-  font-family: "Orbitron HUD", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: "IBM Plex Mono", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--hud); opacity: 0.75; margin-bottom: 8px;
 }}
 .panel-note {{ margin-top: 22px; font-size: 11px; line-height: 1.6; color: var(--ink-3); }}
@@ -822,7 +836,7 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
   position: relative; z-index: 3; background: var(--bg); padding: 60px 34px;
   border-top: 1px solid var(--hud-dim); font-size: 12.5px; color: var(--ink-3); line-height: 1.7;
 }}
-.credits b {{ font-family: "Orbitron HUD", monospace; letter-spacing: 0.04em; color: var(--hud); }}
+.credits b {{ font-family: "IBM Plex Mono", monospace; letter-spacing: 0.04em; color: var(--hud); }}
 </style>
 
 <div class="terminal-intro" id="terminalIntro">
