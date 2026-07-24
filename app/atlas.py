@@ -503,21 +503,31 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
 }}
 .terminal-subline .ar {{ font-size: 17px; color: var(--hud); opacity: 0.75; }}
 
-/* Ammar: a digitalized "talking mascot" next to the boot text, chomping
-   continuously like Pac-Man while the typewriter runs — a chechia (the
-   traditional Tunisian felt cap) is what makes it "Ammar" rather than a
-   generic arcade sprite. */
+/* Ammar: a simple round "game console life-icon" mascot next to the boot
+   text — a plain circle in the same cyan as the terminal text itself
+   (not a separate bright color competing with it), wearing a chechia
+   (the traditional Tunisian felt cap) so it reads as "Ammar" and not a
+   generic emoji. Talks (mouth pulses open/closed) while the typewriter
+   runs; once #pacmanIcon gets the .done class (added in JS right when
+   typing finishes) it crossfades to closed eyes + a smile.  */
 .terminal-guide {{ display: flex; align-items: center; gap: 28px; }}
-.pacman {{ width: 68px; height: 75px; flex-shrink: 0; filter: drop-shadow(0 0 5px var(--hud-dim)); }}
-.pacman-head {{ fill: #ffd94a; }}
-.pacman-eye {{ fill: #241a08; }}
-.jaw {{ fill: var(--bg); transform-origin: 50px 60px; }}
-.jaw-top {{ animation: jawTop 0.6s ease-in-out infinite; }}
-.jaw-bottom {{ animation: jawBottom 0.6s ease-in-out infinite; }}
-@keyframes jawTop {{ 0%, 100% {{ transform: rotate(0deg); }} 50% {{ transform: rotate(-30deg); }} }}
-@keyframes jawBottom {{ 0%, 100% {{ transform: rotate(0deg); }} 50% {{ transform: rotate(30deg); }} }}
+.pacman {{ width: 66px; height: 73px; flex-shrink: 0; filter: drop-shadow(0 0 6px var(--hud-dim)); }}
+.pacman-head {{ fill: var(--hud); }}
 .chechia {{ fill: var(--red); }}
 .chechia-tassel {{ fill: #1a1200; }}
+.face-talking, .face-happy {{ transition: opacity 500ms ease; }}
+.face-talking .eye {{ fill: var(--bg); }}
+.face-talking .mouth {{
+  fill: var(--bg); transform-origin: 50px 75px;
+  animation: mouthTalk 0.42s ease-in-out infinite;
+}}
+@keyframes mouthTalk {{ 0%, 100% {{ transform: scaleY(0.35); }} 50% {{ transform: scaleY(1.5); }} }}
+.face-happy {{
+  opacity: 0;
+  fill: none; stroke: var(--bg); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round;
+}}
+#pacmanIcon.done .face-talking {{ opacity: 0; }}
+#pacmanIcon.done .face-happy {{ opacity: 1; }}
 
 .terminal-lines {{
   font-family: "Orbitron HUD", monospace; font-size: clamp(13px, 2vw, 20px);
@@ -821,13 +831,20 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
     </div>
   </div>
   <div class="terminal-guide">
-    <svg class="pacman" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+    <svg class="pacman" id="pacmanIcon" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
       <path class="chechia" d="M 27,30 L 32,9 L 68,9 L 73,30 Q 50,21 27,30 Z"/>
       <circle class="chechia-tassel" cx="50" cy="9" r="3"/>
       <circle class="pacman-head" cx="50" cy="60" r="42"/>
-      <circle class="pacman-eye" cx="58" cy="34" r="5"/>
-      <polygon class="jaw jaw-top" points="50,60 94,60 94,45"/>
-      <polygon class="jaw jaw-bottom" points="50,60 94,60 94,75"/>
+      <g class="face-talking">
+        <circle class="eye" cx="36" cy="52" r="4.5"/>
+        <circle class="eye" cx="64" cy="52" r="4.5"/>
+        <ellipse class="mouth" cx="50" cy="75" rx="13" ry="5"/>
+      </g>
+      <g class="face-happy">
+        <path d="M 30,52 Q 36,47 42,52"/>
+        <path d="M 58,52 Q 64,47 70,52"/>
+        <path d="M 32,72 Q 50,90 68,72"/>
+      </g>
     </svg>
     <div class="terminal-lines" id="terminalLines"></div>
   </div>
@@ -963,6 +980,7 @@ const BOOT_LINES = [
   function tick() {{
     if (li >= BOOT_LINES.length) {{
       terminalHint.classList.add('show');
+      document.getElementById('pacmanIcon').classList.add('done');
       return;
     }}
     let lineEl = document.getElementById('tline-' + li);
