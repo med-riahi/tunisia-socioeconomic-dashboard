@@ -503,29 +503,34 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
 }}
 .terminal-subline .ar {{ font-size: 17px; color: var(--hud); opacity: 0.75; }}
 
-/* Ammar: a simple round "game console life-icon" mascot next to the boot
-   text — a plain circle in the same cyan as the terminal text itself
-   (not a separate bright color competing with it), wearing a chechia
-   (the traditional Tunisian felt cap) so it reads as "Ammar" and not a
-   generic emoji. Talks (mouth pulses open/closed) while the typewriter
-   runs; once #pacmanIcon gets the .done class (added in JS right when
-   typing finishes) it crossfades to closed eyes + a smile.  */
+/* Ammar: a pixel-blocked "Tamagotchi" mascot next to the boot text — built
+   from stacked rects (an 8-bit sprite, not a smooth icon) in the same cyan
+   as the terminal text itself, wearing a chechia so it reads as "Ammar"
+   and not a generic emoji. Corners get a modest rx: rounder than a strict
+   pixel grid, short of losing the blocky silhouette entirely. Hops
+   continuously (a little stub-footed bounce, virtual-pet style) and talks
+   (mouth pulses) while the typewriter runs; once #pacmanIcon gets the
+   .done class (added in JS right when typing finishes) the face
+   crossfades to closed eyes + a small stepped pixel smile. */
 .terminal-guide {{ display: flex; align-items: center; gap: 28px; }}
-.pacman {{ width: 66px; height: 73px; flex-shrink: 0; filter: drop-shadow(0 0 6px var(--hud-dim)); }}
-.pacman-head {{ fill: var(--hud); }}
+.pacman {{ width: 66px; height: 76px; flex-shrink: 0; overflow: visible; filter: drop-shadow(0 0 6px var(--hud-dim)); }}
+.pacman-body {{ transform-origin: 50px 100px; animation: pacmanHop 0.85s ease-in-out infinite; }}
+.pacman-px {{ fill: var(--hud); }}
 .chechia {{ fill: var(--red); }}
 .chechia-tassel {{ fill: #1a1200; }}
+@keyframes pacmanHop {{
+  0%, 100% {{ transform: translateY(0); }}
+  35% {{ transform: translateY(-9px); }}
+  55% {{ transform: translateY(0); }}
+}}
 .face-talking, .face-happy {{ transition: opacity 500ms ease; }}
 .face-talking .eye {{ fill: var(--bg); }}
 .face-talking .mouth {{
-  fill: var(--bg); transform-origin: 50px 75px;
-  animation: mouthTalk 0.42s ease-in-out infinite;
+  fill: var(--bg); transform-origin: 50px 74px;
+  animation: mouthTalk 0.5s steps(2, end) infinite;
 }}
-@keyframes mouthTalk {{ 0%, 100% {{ transform: scaleY(0.35); }} 50% {{ transform: scaleY(1.5); }} }}
-.face-happy {{
-  opacity: 0;
-  fill: none; stroke: var(--bg); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round;
-}}
+@keyframes mouthTalk {{ 0%, 100% {{ transform: scaleX(0.35); }} 50% {{ transform: scaleX(1); }} }}
+.face-happy {{ opacity: 0; fill: var(--bg); }}
 #pacmanIcon.done .face-talking {{ opacity: 0; }}
 #pacmanIcon.done .face-happy {{ opacity: 1; }}
 
@@ -831,19 +836,29 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
     </div>
   </div>
   <div class="terminal-guide">
-    <svg class="pacman" id="pacmanIcon" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
-      <path class="chechia" d="M 27,30 L 32,9 L 68,9 L 73,30 Q 50,21 27,30 Z"/>
-      <circle class="chechia-tassel" cx="50" cy="9" r="3"/>
-      <circle class="pacman-head" cx="50" cy="60" r="42"/>
-      <g class="face-talking">
-        <circle class="eye" cx="36" cy="52" r="4.5"/>
-        <circle class="eye" cx="64" cy="52" r="4.5"/>
-        <ellipse class="mouth" cx="50" cy="75" rx="13" ry="5"/>
-      </g>
-      <g class="face-happy">
-        <path d="M 30,52 Q 36,47 42,52"/>
-        <path d="M 58,52 Q 64,47 70,52"/>
-        <path d="M 32,72 Q 50,90 68,72"/>
+    <svg class="pacman" id="pacmanIcon" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg">
+      <g class="pacman-body">
+        <path class="chechia" d="M 27,30 L 32,9 L 68,9 L 73,30 Q 50,21 27,30 Z"/>
+        <circle class="chechia-tassel" cx="50" cy="9" r="3"/>
+        <rect class="pacman-px" x="35" y="25" width="30" height="10" rx="4"/>
+        <rect class="pacman-px" x="25" y="35" width="50" height="10" rx="4"/>
+        <rect class="pacman-px" x="15" y="45" width="70" height="30" rx="6"/>
+        <rect class="pacman-px" x="25" y="75" width="50" height="10" rx="4"/>
+        <rect class="pacman-px" x="35" y="85" width="30" height="10" rx="4"/>
+        <rect class="pacman-px" x="30" y="95" width="10" height="8" rx="3"/>
+        <rect class="pacman-px" x="60" y="95" width="10" height="8" rx="3"/>
+        <g class="face-talking">
+          <rect class="eye" x="30" y="52" width="8" height="8" rx="2"/>
+          <rect class="eye" x="62" y="52" width="8" height="8" rx="2"/>
+          <rect class="mouth" x="34" y="70" width="32" height="8" rx="3"/>
+        </g>
+        <g class="face-happy">
+          <rect x="29" y="55" width="10" height="3" rx="1.5"/>
+          <rect x="61" y="55" width="10" height="3" rx="1.5"/>
+          <rect x="34" y="70" width="8" height="5" rx="2"/>
+          <rect x="44" y="76" width="12" height="5" rx="2"/>
+          <rect x="58" y="70" width="8" height="5" rx="2"/>
+        </g>
       </g>
     </svg>
     <div class="terminal-lines" id="terminalLines"></div>
