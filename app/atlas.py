@@ -241,8 +241,9 @@ def _static_assets() -> dict:
     return {
         "cairo_latin_b64": _b64(ASSETS_DIR / "fonts" / "elmessiri_latin.woff2"),
         "cairo_arabic_b64": _b64(ASSETS_DIR / "fonts" / "elmessiri_arabic.woff2"),
+        "reemkufi_b64": _b64(ASSETS_DIR / "fonts" / "reemkufi_hud.woff2"),
+        "orbitron_b64": _b64(ASSETS_DIR / "fonts" / "orbitron_hud.woff2"),
         "coat_b64": (ASSETS_DIR / "coat_of_arms.b64").read_text().strip(),
-        "mediterranean_b64": _b64(ASSETS_DIR / "hero" / "mediterranean.jpg"),
         "geo": geo,
         "africa": africa,
         "monuments": monuments,
@@ -259,6 +260,31 @@ def _official_star_points(cx, cy, r, start_angle_deg=180):
         angle = math.radians(start_angle_deg + i * 144)
         pts.append((round(cx + r * math.cos(angle), 3), round(cy + r * math.sin(angle), 3)))
     return pts
+
+
+def _radar_sweep_svg(cx: float, cy: float, r: float, arc_deg: float = 55, n: int = 18) -> str:
+    """A rotating "sweep beam" out of thin radial lines with decreasing
+    opacity from leading to trailing edge — SVG has no conic-gradient to
+    fade a wedge azimuthally, so this fakes the classic radar-sweep trail
+    with N lines instead of one filled shape. Grouped and spun via CSS
+    (see .radar-sweep / @keyframes radarSpin); transform-origin is set
+    inline here since it has to match this exact cx/cy, not a shared value
+    every instance of the class could use."""
+    lines = []
+    for i in range(n):
+        t = i / (n - 1)
+        angle = math.radians(-t * arc_deg)
+        x2 = cx + r * math.cos(angle)
+        y2 = cy + r * math.sin(angle)
+        opacity = round(0.55 * (1 - t) ** 1.6, 3)
+        lines.append(
+            f'<line x1="{cx}" y1="{cy}" x2="{x2:.1f}" y2="{y2:.1f}" '
+            f'stroke="var(--hud)" stroke-width="0.5" opacity="{opacity}"/>'
+        )
+    return (
+        f'<g class="radar-sweep" style="transform-origin: {cx}px {cy}px">'
+        + "".join(lines) + "</g>"
+    )
 
 
 def _slug_values(df: pd.DataFrame, slug: str, label: str) -> dict:
@@ -322,8 +348,9 @@ def build_atlas_html(df: pd.DataFrame) -> str:
     assets = _static_assets()
     cairo_latin_b64 = assets["cairo_latin_b64"]
     cairo_arabic_b64 = assets["cairo_arabic_b64"]
+    orbitron_b64 = assets["orbitron_b64"]
+    reemkufi_b64 = assets["reemkufi_b64"]
     coat_b64 = assets["coat_b64"]
-    mediterranean_b64 = assets["mediterranean_b64"]
     geo = assets["geo"]
     africa = assets["africa"]
     monuments = assets["monuments"]
@@ -336,6 +363,7 @@ def build_atlas_html(df: pd.DataFrame) -> str:
     COUNTRY_PATH = geo["country_path"]
     OTHER_LAND_PATH = geo["other_land_path"]
     TUNISIA_VIEWBOX = geo["tunisia_viewbox"]
+    LAND_LABELS = geo.get("labels", [])
     FULL_VIEWBOX = [0, 0, W, H]
 
     flag_cx = geo["flag_cx"]
@@ -349,6 +377,17 @@ def build_atlas_html(df: pd.DataFrame) -> str:
     star_cy = flag_cy
     STAR_PTS = " ".join(f"{x},{y}" for x, y in _official_star_points(star_cx, star_cy, star_r))
 
+    lat_ns = "N" if geo["flag_lat"] >= 0 else "S"
+    lon_ew = "E" if geo["flag_lon"] >= 0 else "W"
+    COORD_READOUT = f'{abs(geo["flag_lat"]):.4f}°{lat_ns}  {abs(geo["flag_lon"]):.4f}°{lon_ew}'
+    # Rings/sweep are sized off the full establishing-shot viewBox, not
+    # Tunisia's own size, so they genuinely sweep across the whole map
+    # rather than staying a small halo around the country.
+    RING_BASE_R = min(W, H) * 0.045
+    RADAR_SWEEP_SVG = _radar_sweep_svg(flag_cx, flag_cy, max(W, H) * 0.62)
+    CROSSHAIR_R = flag_r * 2.6
+    CROSSHAIR_TICK = flag_r * 3.1
+
     MONUMENTS_JS = {
         gov: {"b64": m["b64"], "name": m["name"], "credit": m["credit"]}
         for gov, m in monuments.items()
@@ -360,6 +399,13 @@ def build_atlas_html(df: pd.DataFrame) -> str:
 <style>
 @font-face {{ font-family: "El Messiri"; src: url(data:font/woff2;base64,{cairo_latin_b64}) format("woff2-variations"), url(data:font/woff2;base64,{cairo_latin_b64}) format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0000-024F,U+2000-206F,U+2122; }}
 @font-face {{ font-family: "El Messiri"; src: url(data:font/woff2;base64,{cairo_arabic_b64}) format("woff2-variations"), url(data:font/woff2;base64,{cairo_arabic_b64}) format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0600-06FF,U+200C-200F,U+FEFF; }}
+@font-face {{ font-family: "Orbitron HUD"; src: url(data:font/woff2;base64,{orbitron_b64}) format("woff2-variations"), url(data:font/woff2;base64,{orbitron_b64}) format("woff2"); font-weight: 400 900; font-display: swap; }}
+/* Reem Kufi: a modern text revival of Kufic script — Kufic's native
+   geometry (angular, squared-off strokes) already reads as "technical"
+   the way Latin geometric sans faces do, without inventing a fake
+   futuristic treatment on top of Arabic letterforms. Pairs with Orbitron
+   for the Latin/digital side of the same HUD language. */
+@font-face {{ font-family: "Reem Kufi HUD"; src: url(data:font/woff2;base64,{reemkufi_b64}) format("woff2-variations"), url(data:font/woff2;base64,{reemkufi_b64}) format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0600-06FF,U+200C-200F,U+FEFF; }}
 
 :root {{
   --bg: #05070b;
@@ -375,6 +421,8 @@ def build_atlas_html(df: pd.DataFrame) -> str:
   --gold: #d4a94a;
   --grid: rgba(238,241,246,0.05);
   --border: rgba(238,241,246,0.10);
+  --hud: #4be8ff;
+  --hud-dim: rgba(75,232,255,0.35);
 }}
 
 * {{ box-sizing: border-box; }}
@@ -385,7 +433,7 @@ def build_atlas_html(df: pd.DataFrame) -> str:
    there's nothing to clip in the first place. */
 html, body {{ margin: 0; padding: 0; background: var(--bg); }}
 body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif; color: var(--ink); }}
-[lang="ar"], .ar {{ direction: rtl; }}
+[lang="ar"], .ar {{ direction: rtl; font-family: "Reem Kufi HUD", "El Messiri", sans-serif; }}
 
 /* 220vh made the zoom-to-Tunisia complete by ~58% of the total scrollable
    distance (measured directly: viewBox stopped changing well before the
@@ -422,30 +470,43 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
   display: flex; flex-direction: column; align-items: center; text-align: center;
   pointer-events: none; will-change: opacity, transform;
 }}
-.hero-eyebrow {{ font-family: "El Messiri", sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }}
+.hero-eyebrow {{
+  font-family: "Orbitron HUD", monospace; font-weight: 600; font-size: 11px; letter-spacing: 0.34em;
+  text-transform: uppercase; color: var(--hud); margin-bottom: 22px; text-shadow: 0 0 8px var(--hud-dim);
+}}
 .hero-title-wrap {{ position: relative; display: inline-block; margin: 4px 0 2px; }}
 .coat {{
   position: absolute; left: 0; bottom: 100%; margin-bottom: 10px;
   width: 34px; height: auto;
+  filter: drop-shadow(0 0 3px var(--hud)) drop-shadow(0 0 8px var(--hud-dim));
 }}
 .hero-title-en {{
-  font-family: "El Messiri", sans-serif; font-weight: 700;
-  font-size: clamp(72px, 15vw, 190px); letter-spacing: 0.01em; line-height: 0.9;
-  color: var(--red); -webkit-text-stroke: 2.5px #fff; paint-order: stroke fill;
+  font-family: "Orbitron HUD", monospace; font-weight: 800;
+  font-size: clamp(64px, 13vw, 168px); letter-spacing: 0.03em; line-height: 0.9;
+  color: var(--red); -webkit-text-stroke: 1px var(--hud);
+  paint-order: stroke fill;
+  text-shadow: 0 0 14px var(--red-glow), 0 0 36px rgba(231,0,19,0.35), 0 0 3px var(--hud-dim);
 }}
 .hero-title-tag {{
   position: absolute; right: 4px; bottom: -22px;
-  font-style: italic; font-size: 16px; color: var(--gold); letter-spacing: 0.02em;
+  font-family: "Orbitron HUD", monospace; font-size: 14px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--hud); opacity: 0.8; text-shadow: 0 0 6px var(--hud-dim);
 }}
 .hero-subline {{
   display: flex; align-items: baseline; justify-content: space-between;
   width: min(300px, 70vw); margin: 30px auto 0;
 }}
-.hero-subline .fr {{ font-size: 13px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-2); text-shadow: 0 1px 10px rgba(2,3,5,0.95), 0 1px 3px rgba(2,3,5,0.95); }}
-.hero-subline .ar {{ font-size: 17px; font-weight: 600; color: var(--ink-2); text-shadow: 0 1px 10px rgba(2,3,5,0.95), 0 1px 3px rgba(2,3,5,0.95); }}
+.hero-subline .fr {{
+  font-family: "Orbitron HUD", monospace; font-size: 13px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--hud); text-shadow: 0 0 6px var(--hud-dim), 0 1px 3px rgba(2,3,5,0.95);
+}}
+.hero-subline .ar {{
+  font-size: 19px; font-weight: 500; color: var(--hud);
+  text-shadow: 0 0 8px var(--hud-dim), 0 1px 3px rgba(2,3,5,0.95);
+}}
 .hero-desc {{
-  max-width: 460px; margin: 26px auto 0; font-size: 13.5px; line-height: 1.65; color: var(--ink-2);
-  padding: 0 24px;
+  max-width: 460px; margin: 26px auto 0; font-size: 12.5px; line-height: 1.7; color: var(--ink-2);
+  padding: 0 24px; font-family: Menlo, monospace;
   /* The scrim behind the hero was lightened so the real map reads as
      present right away instead of a black block — that means this text can
      now sit over busier map content (the flag emblem, coastline), so each
@@ -455,15 +516,49 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
 }}
 .hero-scroll-hint {{
   position: absolute; bottom: 6vh; left: 0; right: 0; z-index: 3; text-align: center;
-  font-family: Menlo, monospace; font-size: 10.5px; color: var(--ink-3);
-  letter-spacing: 0.18em; text-transform: uppercase;
+  font-family: "Orbitron HUD", monospace; font-size: 10.5px; color: var(--hud); opacity: 0.75;
+  letter-spacing: 0.22em; text-transform: uppercase; text-shadow: 0 0 5px var(--hud-dim);
 }}
-.hero-scroll-hint .chevron {{
+.hero-scroll-hint .chevron, .terminal-hint .chevron {{
   display: block; margin: 8px auto 0; width: 9px; height: 9px;
-  border-right: 1.5px solid var(--ink-3); border-bottom: 1.5px solid var(--ink-3);
+  border-right: 1.5px solid var(--hud); border-bottom: 1.5px solid var(--hud);
   transform: rotate(45deg); animation: bob 1.8s ease-in-out infinite;
 }}
 @keyframes bob {{ 0%,100% {{ transform: rotate(45deg) translate(0,0); }} 50% {{ transform: rotate(45deg) translate(4px,4px); }} }}
+
+/* Terminal boot sequence: a dark, mapless first screen that types out a
+   short boot log before the Mediterranean establishing shot even appears
+   — the map is the payoff of a "system locating its target" beat, not
+   the first thing you see. Not sticky (unlike .hero): it's meant to
+   scroll away entirely once read, handing off to the map section that
+   follows. onScroll (below) offsets its own scroll math by this
+   element's height so the zoom doesn't start until this has scrolled
+   out of view. */
+.terminal-intro {{
+  height: 100vh; width: 100%; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+  background-image:
+    repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 48px);
+}}
+.terminal-lines {{
+  font-family: "Orbitron HUD", monospace; font-size: clamp(13px, 2vw, 20px);
+  color: var(--hud); letter-spacing: 0.09em; text-align: left; min-height: 4.2em;
+}}
+.terminal-line {{ line-height: 2; text-shadow: 0 0 8px var(--hud-dim); }}
+.terminal-cursor {{
+  display: inline-block; width: 0.5em; height: 1em; background: var(--hud);
+  margin-left: 3px; vertical-align: text-bottom; box-shadow: 0 0 6px var(--hud);
+  animation: cursorBlink 0.9s steps(1) infinite;
+}}
+@keyframes cursorBlink {{ 0%, 50% {{ opacity: 1; }} 51%, 100% {{ opacity: 0; }} }}
+.terminal-hint {{
+  position: absolute; bottom: 10vh; font-family: "Orbitron HUD", monospace; font-size: 11px;
+  letter-spacing: 0.24em; color: var(--hud); opacity: 0; text-transform: uppercase;
+  transition: opacity 600ms ease; text-align: center;
+}}
+.terminal-hint.show {{ opacity: 0.75; }}
 
 .locator {{
   position: absolute; top: 28px; right: 34px; z-index: 3;
@@ -478,49 +573,145 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
 }}
 
 .map-canvas-wrap {{ position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; }}
-.hero-photo {{
-  position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%;
-  object-fit: cover; object-position: 50% 62%;
-  pointer-events: none; will-change: opacity;
-}}
 svg.atlas-map {{ width: 100%; height: 100%; }}
-.land {{ fill: var(--land); stroke: rgba(238,241,246,0.10); stroke-width: 0.6; }}
-.sea-label {{ fill: var(--ink-3); font-family: Menlo, monospace; font-size: 5px; letter-spacing: 0.3em; text-transform: uppercase; }}
-path.region {{ stroke: rgba(5,7,11,0.6); stroke-width: 0.6; cursor: pointer; transition: filter 120ms ease, stroke 120ms ease; }}
-path.region:hover {{ filter: brightness(1.35); stroke: var(--gold); stroke-width: 1; }}
-path.region.selected {{ stroke: var(--gold); stroke-width: 1.4; }}
-#countryOutline {{ fill: none; stroke: rgba(212,169,74,0.55); stroke-width: 0.9; transition: opacity 300ms ease; }}
+.hud-grid {{ opacity: 0.55; }}
+/* Split into two paths sharing the same `d`: drop-shadow shadows an
+   element's whole rendered alpha, fill included — on one path with both a
+   large fill (most of Algeria/Libya/Europe) and a glow stroke, that
+   blurred the ENTIRE landmass into a cyan wash instead of just glowing
+   the coastline. A fill-only path (no glow) plus a stroke-only path
+   (glow, no fill) keeps the glow on just the outline. */
+.land-fill {{ fill: rgba(9,22,26,0.55); }}
+.land-glow {{
+  fill: none; stroke: var(--hud); stroke-width: 0.55; opacity: 0.85;
+  /* CSS drop-shadow instead of a custom feGaussianBlur+feMerge filter —
+     the old version re-rasterized a full multi-pass blur over the entire
+     (large, detailed) coastline on every scroll-driven viewBox change,
+     which was the main source of the page feeling heavy. drop-shadow is
+     cheaper and its blur radius is tied directly to the shadow, not a
+     fixed 220% oversized filter region. */
+  filter: drop-shadow(0 0 1.4px var(--hud)) drop-shadow(0 0 3.5px var(--hud-dim));
+}}
+.sea-label {{
+  fill: var(--hud); font-family: "Orbitron HUD", Menlo, monospace; font-weight: 700;
+  font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.65;
+  text-anchor: middle; text-shadow: 0 0 5px var(--hud-dim);
+}}
+.land-label {{
+  fill: var(--hud); font-family: "Orbitron HUD", Menlo, monospace; font-weight: 700; font-size: 8px;
+  letter-spacing: 0.1em; text-transform: uppercase; text-anchor: middle; opacity: 0.72;
+  text-shadow: 0 0 4px var(--hud-dim);
+}}
+/* The choropleth data itself glows too, not just the acquisition HUD —
+   a soft warm halo (not cyan: this is data/target territory, same
+   red-family logic as the flag) so the governorate colors read as part
+   of the instrument rather than a flat web-dashboard layer dropped on
+   top of it. */
+path.region {{
+  stroke: rgba(5,7,11,0.6); stroke-width: 0.6; cursor: pointer;
+  filter: drop-shadow(0 0 2px rgba(220,120,60,0.3));
+  transition: filter 120ms ease, stroke 120ms ease;
+}}
+path.region:hover {{ filter: brightness(1.35) drop-shadow(0 0 4px var(--gold)); stroke: var(--gold); stroke-width: 1; }}
+path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)); stroke: var(--gold); stroke-width: 1.4; }}
+#countryOutline {{
+  fill: none; stroke: rgba(212,169,74,0.6); stroke-width: 0.9; transition: opacity 300ms ease;
+  filter: drop-shadow(0 0 3px rgba(212,169,74,0.4));
+}}
+
+/* Tunisia itself glows too (the country shape, the disc, the crescent,
+   the star) — simple, low-point-count geometry, so a proper filter here
+   is cheap even though it wasn't on the coastline above. Red, not cyan:
+   this is the target, not the instrument reading it. */
+#flagLayer {{ filter: drop-shadow(0 0 2px var(--red)) drop-shadow(0 0 7px var(--red-glow)); }}
+
+/* Acquisition HUD: crosshair + expanding rings + a rotating sweep beam,
+   all centered on Tunisia and all in --hud cyan rather than the brand red
+   (red is reserved for Tunisia itself and the data layer — this is
+   "instrument", not "flag") — a cockpit/targeting-computer read on the
+   country before the choropleth data locks in. Fades out via revealP in
+   JS once the data layer takes over, same as flagLayer. Glow is applied
+   per-element (not once on the whole group) so it lands on the thin rings/
+   lines without also blurring the readout text into mush. */
+.radar-ring {{
+  fill: none; stroke: var(--hud); stroke-width: 0.6; opacity: 0;
+  filter: drop-shadow(0 0 1.5px var(--hud));
+  transform-box: fill-box; transform-origin: center;
+  animation: radarPulse 7s cubic-bezier(0.15, 0.55, 0.4, 1) infinite;
+}}
+.radar-ring:nth-child(2) {{ animation-delay: 2.33s; }}
+.radar-ring:nth-child(3) {{ animation-delay: 4.66s; }}
+@keyframes radarPulse {{
+  0% {{ transform: scale(0.35); opacity: 0.7; }}
+  70% {{ opacity: 0.14; }}
+  100% {{ transform: scale(26); opacity: 0; }}
+}}
+.radar-sweep {{
+  animation: radarSpin 5s linear infinite;
+  filter: drop-shadow(0 0 1.5px var(--hud));
+}}
+@keyframes radarSpin {{ to {{ transform: rotate(360deg); }} }}
+.crosshair {{
+  stroke: var(--hud); fill: none; stroke-width: 0.55; opacity: 0.85;
+  filter: drop-shadow(0 0 1.5px var(--hud));
+}}
+.hud-readout {{
+  fill: var(--hud); font-family: "Orbitron HUD", Menlo, monospace; font-weight: 600; font-size: 6.4px;
+  letter-spacing: 0.07em; opacity: 0.88; text-shadow: 0 0 4px var(--hud-dim);
+  /* A rare, brief stutter — signal-interference flavor, not constant
+     noise. 7s cycle, glitching for well under a second of it, so it reads
+     as an occasional interruption instead of a distracting tic. */
+  animation: hudGlitch 7s ease-in-out infinite;
+}}
+@keyframes hudGlitch {{
+  0%, 91%, 100% {{ transform: translate(0,0); opacity: 0.88; }}
+  92% {{ transform: translate(-0.7px, 0.3px); opacity: 0.35; }}
+  93% {{ transform: translate(0.6px, -0.2px); opacity: 0.95; }}
+  94% {{ transform: translate(-0.3px, 0.15px); opacity: 0.5; }}
+  95% {{ transform: translate(0,0); opacity: 0.88; }}
+}}
 
 .map-topbar {{
   position: fixed; top: 0; left: 0; right: 0; z-index: 7;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 22px 34px; border-bottom: 1px solid var(--border);
+  padding: 22px 34px; border-bottom: 1px solid var(--hud-dim);
   background: linear-gradient(to bottom, var(--bg) 60%, transparent);
   opacity: 0; pointer-events: none; transition: opacity 200ms ease;
 }}
 .map-topbar.show {{ opacity: 1; }}
 .brand, .theme-switch {{ pointer-events: auto; }}
 .brand {{ display: flex; align-items: center; gap: 12px; }}
-.brand img {{ width: 24px; height: auto; opacity: 0.9; }}
-.brand-text {{ font-family: "El Messiri", sans-serif; font-weight: 600; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2); }}
-.theme-switch {{ display: flex; gap: 6px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 4px; }}
-.theme-btn {{
-  font-family: "El Messiri", sans-serif; font-size: 13.5px; font-weight: 600; color: var(--ink-2);
-  background: transparent; border: none; border-radius: 7px; padding: 8px 16px; cursor: pointer;
-  transition: all 150ms ease; letter-spacing: 0.02em;
+.brand img {{ width: 24px; height: auto; opacity: 0.9; filter: drop-shadow(0 0 3px var(--hud-dim)); }}
+.brand-text {{
+  font-family: "Orbitron HUD", monospace; font-weight: 600; font-size: 12px; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--hud); text-shadow: 0 0 6px var(--hud-dim);
 }}
-.theme-btn.active {{ background: var(--red); color: #fff; }}
-.theme-btn:not(.active):hover {{ color: var(--ink); }}
+.theme-switch {{
+  display: flex; gap: 6px; background: rgba(9,22,26,0.6); border: 1px solid var(--hud-dim);
+  border-radius: 10px; padding: 4px; box-shadow: 0 0 12px rgba(75,232,255,0.08);
+}}
+.theme-btn {{
+  font-family: "Orbitron HUD", monospace; font-size: 12px; font-weight: 600; color: var(--ink-2);
+  background: transparent; border: none; border-radius: 7px; padding: 8px 16px; cursor: pointer;
+  transition: all 150ms ease; letter-spacing: 0.05em; text-transform: uppercase;
+}}
+.theme-btn.active {{ background: var(--red); color: #fff; box-shadow: 0 0 14px var(--red-glow); }}
+.theme-btn:not(.active):hover {{ color: var(--hud); }}
 
 .legend {{
   position: fixed; left: 34px; bottom: 28px; z-index: 4; display: flex; flex-direction: column; gap: 8px;
-  font-family: Menlo, monospace; font-size: 10px; color: var(--ink-3);
+  font-family: "Orbitron HUD", monospace; font-size: 10px; color: var(--ink-3);
   opacity: 0; transition: opacity 200ms ease; pointer-events: none;
+  background: rgba(9,22,26,0.55); border: 1px solid var(--hud-dim); border-radius: 8px;
+  padding: 12px 16px; backdrop-filter: blur(6px);
 }}
 .legend.show {{ opacity: 1; }}
-.legend-title {{ color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.1em; font-size: 10px; }}
-.legend-ramp {{ width: 180px; height: 6px; border-radius: 3px; background: linear-gradient(to right, #2a0a0d, #701620, #c71f1f, #ff6a2e); }}
-.legend-range {{ display: flex; justify-content: space-between; width: 180px; }}
+.legend-title {{ color: var(--hud); text-transform: uppercase; letter-spacing: 0.12em; font-size: 10px; text-shadow: 0 0 5px var(--hud-dim); }}
+.legend-ramp {{
+  width: 180px; height: 6px; border-radius: 3px; background: linear-gradient(to right, #2a0a0d, #701620, #c71f1f, #ff6a2e);
+  box-shadow: 0 0 8px rgba(231,0,19,0.35);
+}}
+.legend-range {{ display: flex; justify-content: space-between; width: 180px; color: var(--ink-2); }}
 
 /* Country-wide KPI strip — real bordered cards docked right under the
    topbar, front and center over the map, not a subtle corner readout.
@@ -533,15 +724,21 @@ path.region.selected {{ stroke: var(--gold); stroke-width: 1.4; }}
 }}
 .kpi-strip.show {{ opacity: 1; }}
 .kpi-card {{
-  background: rgba(11,15,22,0.78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--border); border-left: 3px solid var(--red);
+  background: rgba(9,17,22,0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--hud-dim); border-left: 3px solid var(--red);
   border-radius: 9px; padding: 10px 20px; min-width: 140px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35), 0 0 14px rgba(75,232,255,0.06);
 }}
-.kpi-card-label {{ font-family: Menlo, monospace; font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 5px; }}
-.kpi-card-value {{ font-family: "El Messiri", sans-serif; font-weight: 700; font-size: 23px; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }}
-.kpi-card-value .unit {{ font-size: 11px; color: var(--ink-2); font-weight: 400; margin-left: 4px; }}
-.kpi-card-value .sub {{ display: block; font-family: Menlo, monospace; font-size: 11px; font-weight: 400; color: var(--gold); margin-top: 2px; }}
+.kpi-card-label {{
+  font-family: "Orbitron HUD", monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--hud); opacity: 0.75; margin-bottom: 5px;
+}}
+.kpi-card-value {{
+  font-family: "Orbitron HUD", monospace; font-weight: 700; font-size: 21px; color: var(--ink);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}}
+.kpi-card-value .unit {{ font-size: 10px; color: var(--ink-2); font-weight: 400; margin-left: 4px; }}
+.kpi-card-value .sub {{ display: block; font-family: "Orbitron HUD", monospace; font-size: 11px; font-weight: 400; color: var(--gold); margin-top: 2px; }}
 
 .map-tooltip {{
   position: fixed; pointer-events: none; background: var(--bg-3); border: 1px solid var(--border);
@@ -553,7 +750,8 @@ path.region.selected {{ stroke: var(--gold); stroke-width: 1.4; }}
 
 .panel {{
   position: fixed; top: 0; right: 0; height: 100%; width: 460px; z-index: 5;
-  background: var(--bg-2); border-left: 1px solid var(--border);
+  background: var(--bg-2); border-left: 1px solid var(--hud-dim);
+  box-shadow: -8px 0 30px rgba(75,232,255,0.05);
   transform: translateX(100%); transition: transform 260ms cubic-bezier(.2,.8,.2,1);
   overflow-y: auto;
 }}
@@ -575,28 +773,47 @@ path.region.selected {{ stroke: var(--gold); stroke-width: 1.4; }}
   border: 1px solid rgba(255,255,255,0.25); background: rgba(11,15,22,0.55); backdrop-filter: blur(2px);
   color: #fff; cursor: pointer; font-size: 14px; line-height: 1;
 }}
-.panel-close:hover {{ border-color: var(--gold); color: var(--gold); }}
+.panel-close:hover {{ border-color: var(--hud); color: var(--hud); }}
 .panel-content {{ padding: 20px 28px 30px; }}
-.panel-name-ar {{ font-size: 22px; margin-bottom: 2px; }}
-.panel-name-en {{ font-family: "El Messiri", sans-serif; font-weight: 700; font-size: 30px; line-height: 1.05; }}
-.panel-name-fr {{ font-size: 13px; color: var(--ink-2); letter-spacing: 0.05em; margin-top: 4px; }}
+.panel-name-ar {{ font-size: 24px; margin-bottom: 4px; color: var(--hud); text-shadow: 0 0 8px var(--hud-dim); }}
+.panel-name-en {{
+  font-family: "Orbitron HUD", monospace; font-weight: 700; font-size: 26px; line-height: 1.1;
+  text-shadow: 0 0 10px var(--hud-dim);
+}}
+.panel-name-fr {{
+  font-family: "Orbitron HUD", monospace; font-size: 11.5px; color: var(--hud); letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 6px; opacity: 0.8;
+}}
 .panel-about {{ margin-top: 16px; font-size: 13px; line-height: 1.65; color: var(--ink-2); }}
-.panel-kpi {{ margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--border); }}
-.panel-kpi-label {{ font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }}
-.panel-kpi-value {{ font-family: "El Messiri", sans-serif; font-weight: 700; font-size: 40px; color: var(--red); }}
+.panel-kpi {{ margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--hud-dim); }}
+.panel-kpi-label {{
+  font-family: "Orbitron HUD", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--hud); opacity: 0.75; margin-bottom: 6px;
+}}
+.panel-kpi-value {{
+  font-family: "Orbitron HUD", monospace; font-weight: 700; font-size: 36px; color: var(--red);
+  text-shadow: 0 0 12px var(--red-glow);
+}}
 .panel-kpi-unit {{ font-size: 13px; color: var(--ink-2); margin-left: 6px; }}
-.panel-rank {{ font-family: Menlo, monospace; font-size: 11px; color: var(--ink-2); margin-top: 8px; }}
-.panel-insight {{ margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); font-size: 13px; line-height: 1.65; color: var(--ink-2); }}
-.panel-insight-label {{ font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }}
+.panel-rank {{ font-family: "Orbitron HUD", monospace; font-size: 10.5px; color: var(--hud); opacity: 0.8; margin-top: 8px; }}
+.panel-insight {{ margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--hud-dim); font-size: 13px; line-height: 1.65; color: var(--ink-2); }}
+.panel-insight-label {{
+  font-family: "Orbitron HUD", monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--hud); opacity: 0.75; margin-bottom: 8px;
+}}
 .panel-note {{ margin-top: 22px; font-size: 11px; line-height: 1.6; color: var(--ink-3); }}
 
 .credits {{
   position: relative; z-index: 3; background: var(--bg); padding: 60px 34px;
-  border-top: 1px solid var(--border); font-size: 12.5px; color: var(--ink-3); line-height: 1.7;
+  border-top: 1px solid var(--hud-dim); font-size: 12.5px; color: var(--ink-3); line-height: 1.7;
 }}
-.credits b {{ color: var(--ink-2); }}
+.credits b {{ font-family: "Orbitron HUD", monospace; letter-spacing: 0.04em; color: var(--hud); }}
 </style>
 
+<div class="terminal-intro" id="terminalIntro">
+  <div class="terminal-lines" id="terminalLines"></div>
+  <div class="terminal-hint" id="terminalHint">Scroll to begin<span class="chevron"></span></div>
+</div>
 <div class="scroll-spacer">
   <div class="hero" id="hero">
     <div class="hero-text" id="heroText">
@@ -616,25 +833,45 @@ path.region.selected {{ stroke: var(--gold); stroke-width: 1.4; }}
       </p>
     </div>
     <div class="map-canvas-wrap">
-      <img class="hero-photo" id="heroPhoto" src="data:image/jpeg;base64,{mediterranean_b64}" alt="Satellite view of the Mediterranean basin, from the Iberian peninsula and the Alps to Turkey and the Sahara" />
-      <svg class="atlas-map" id="atlasSvg" viewBox="{FULL_VIEWBOX[0]} {FULL_VIEWBOX[1]} {FULL_VIEWBOX[2]} {FULL_VIEWBOX[3]}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <svg class="atlas-map" id="atlasSvg" viewBox="{FULL_VIEWBOX[0]} {FULL_VIEWBOX[1]} {FULL_VIEWBOX[2]} {FULL_VIEWBOX[3]}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <clipPath id="countryClip"><path d="{COUNTRY_PATH}"/></clipPath>
-          <radialGradient id="seaGradient" cx="42%" cy="38%" r="75%">
-            <stop offset="0%" stop-color="#0e3350"/>
-            <stop offset="45%" stop-color="#0a2740"/>
-            <stop offset="100%" stop-color="#061627"/>
+          <radialGradient id="seaGradient" cx="42%" cy="38%" r="85%">
+            <stop offset="0%" stop-color="#081824"/>
+            <stop offset="45%" stop-color="#050f18"/>
+            <stop offset="100%" stop-color="#02070c"/>
           </radialGradient>
+          <pattern id="hudGrid" width="54" height="54" patternUnits="userSpaceOnUse">
+            <path d="M 54 0 L 0 0 0 54" fill="none" stroke="var(--hud)" stroke-width="0.3"/>
+          </pattern>
         </defs>
-        <rect x="{FULL_VIEWBOX[0]}" y="{FULL_VIEWBOX[1]}" width="{FULL_VIEWBOX[2]}" height="{FULL_VIEWBOX[3]}" fill="url(#seaGradient)" opacity="0.93"/>
-        <text class="sea-label" x="{W*0.62}" y="{H*0.28}">MEDITERRANEAN SEA</text>
-        <path class="land" d="{OTHER_LAND_PATH}"/>
+        <rect x="{FULL_VIEWBOX[0]}" y="{FULL_VIEWBOX[1]}" width="{FULL_VIEWBOX[2]}" height="{FULL_VIEWBOX[3]}" fill="url(#seaGradient)"/>
+        <rect class="hud-grid" x="{FULL_VIEWBOX[0]}" y="{FULL_VIEWBOX[1]}" width="{FULL_VIEWBOX[2]}" height="{FULL_VIEWBOX[3]}" fill="url(#hudGrid)"/>
+        <text class="sea-label" x="{W*0.74}" y="{H*0.44}">MEDITERRANEAN SEA</text>
+        <path class="land-fill" d="{OTHER_LAND_PATH}"/>
+        <path class="land-glow" d="{OTHER_LAND_PATH}"/>
+        {"".join(f'<text class="land-label" x="{lbl["x"]}" y="{lbl["y"]}">{lbl["name"]}</text>' for lbl in LAND_LABELS)}
         <g id="flagLayer" clip-path="url(#countryClip)">
           <path d="{COUNTRY_PATH}" fill="#c8102e"/>
           <circle cx="{flag_cx}" cy="{flag_cy}" r="{flag_r}" fill="#fdfdfb"/>
           <circle cx="{flag_cx}" cy="{flag_cy}" r="{crescent_outer_r}" fill="#c8102e"/>
           <circle cx="{flag_cx + crescent_offset}" cy="{flag_cy}" r="{crescent_inner_r}" fill="#fdfdfb"/>
           <polygon points="{STAR_PTS}" fill="#c8102e"/>
+        </g>
+        <g id="acquisitionHud">
+          <circle class="radar-ring" cx="{flag_cx}" cy="{flag_cy}" r="{RING_BASE_R}"/>
+          <circle class="radar-ring" cx="{flag_cx}" cy="{flag_cy}" r="{RING_BASE_R}"/>
+          <circle class="radar-ring" cx="{flag_cx}" cy="{flag_cy}" r="{RING_BASE_R}"/>
+          {RADAR_SWEEP_SVG}
+          <g class="crosshair">
+            <circle cx="{flag_cx}" cy="{flag_cy}" r="{CROSSHAIR_R}"/>
+            <line x1="{flag_cx-CROSSHAIR_TICK}" y1="{flag_cy}" x2="{flag_cx-CROSSHAIR_R}" y2="{flag_cy}"/>
+            <line x1="{flag_cx+CROSSHAIR_R}" y1="{flag_cy}" x2="{flag_cx+CROSSHAIR_TICK}" y2="{flag_cy}"/>
+            <line x1="{flag_cx}" y1="{flag_cy-CROSSHAIR_TICK}" x2="{flag_cx}" y2="{flag_cy-CROSSHAIR_R}"/>
+            <line x1="{flag_cx}" y1="{flag_cy+CROSSHAIR_R}" x2="{flag_cx}" y2="{flag_cy+CROSSHAIR_TICK}"/>
+          </g>
+          <text class="hud-readout" x="{flag_cx+CROSSHAIR_TICK+4}" y="{flag_cy-6}">TN · REPUBLIC OF TUNISIA</text>
+          <text class="hud-readout" x="{flag_cx+CROSSHAIR_TICK+4}" y="{flag_cy+4}">{COORD_READOUT}</text>
         </g>
         <g id="dataLayer" clip-path="url(#countryClip)" opacity="0">
           {"".join(f'<path class="region" data-gov="{g}" d="{d}"></path>' for g, d in GOV_PATHS.items())}
@@ -695,8 +932,8 @@ path.region.selected {{ stroke: var(--gold); stroke-width: 1.4; }}
 
 <div class="credits">
   <b>Tunisia Data Atlas</b><br/>
-  Governorate boundaries: TUN_adm1 shapefile. Neighboring coastlines: Natural Earth (public domain, 110m).
-  Mediterranean satellite composite: NASA Earth Observatory / Worldview imagery, public domain.
+  Governorate boundaries: TUN_adm1 shapefile. Mediterranean-basin coastlines (Iberia to Turkey, the
+  Atlas mountains to the Sahara): Natural Earth (public domain, 10m).
   National emblem: Wikimedia Commons, public domain.<br/>
   Each governorate panel shows one real, verified monument photo (Wikimedia Commons, freely licensed, credited
   in-panel) and a description condensed from that governorate's English Wikipedia article. Where a governorate
@@ -708,13 +945,51 @@ const PAYLOAD = {json.dumps(PAYLOAD, ensure_ascii=False)};
 const FULL_VB = {json.dumps(FULL_VIEWBOX)};
 const TUNISIA_VB = {json.dumps(TUNISIA_VIEWBOX)};
 
+// Boot-sequence typewriter: types a short log into the dark, mapless
+// first screen, then reveals a scroll hint. Runs once on load, entirely
+// independent of the scroll-driven zoom below.
+const terminalIntro = document.getElementById('terminalIntro');
+const terminalLines = document.getElementById('terminalLines');
+const terminalHint = document.getElementById('terminalHint');
+const BOOT_LINES = [
+  'TUNISIA DATA ATLAS',
+  'ESTABLISHING SATELLITE LINK...',
+  'TARGET ACQUIRED — TUNISIA',
+];
+(function typeBootSequence() {{
+  let li = 0, ci = 0;
+  function tick() {{
+    if (li >= BOOT_LINES.length) {{
+      terminalHint.classList.add('show');
+      return;
+    }}
+    let lineEl = document.getElementById('tline-' + li);
+    if (!lineEl) {{
+      lineEl = document.createElement('div');
+      lineEl.className = 'terminal-line';
+      lineEl.id = 'tline-' + li;
+      terminalLines.appendChild(lineEl);
+    }}
+    const full = BOOT_LINES[li];
+    lineEl.innerHTML = full.slice(0, ci) + '<span class="terminal-cursor"></span>';
+    if (ci < full.length) {{
+      ci++;
+      setTimeout(tick, 28 + Math.random() * 40);
+    }} else {{
+      li++; ci = 0;
+      setTimeout(tick, 480);
+    }}
+  }}
+  setTimeout(tick, 550);
+}})();
+
 const spacer = document.querySelector('.scroll-spacer');
-const heroPhoto = document.getElementById('heroPhoto');
 const heroText = document.getElementById('heroText');
 const heroScrim = document.getElementById('heroScrim');
 const scrollHint = document.getElementById('scrollHint');
 const svg = document.getElementById('atlasSvg');
 const flagLayer = document.getElementById('flagLayer');
+const acquisitionHud = document.getElementById('acquisitionHud');
 const dataLayer = document.getElementById('dataLayer');
 const countryOutline = document.getElementById('countryOutline');
 const topbar = document.getElementById('topbar');
@@ -735,10 +1010,31 @@ function easeInOut(t) {{ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2; }}
 
 const FULL_CX = FULL_VB[0] + FULL_VB[2]/2, FULL_CY = FULL_VB[1] + FULL_VB[3]/2;
 const TUNISIA_CX = TUNISIA_VB[0] + TUNISIA_VB[2]/2, TUNISIA_CY = TUNISIA_VB[1] + TUNISIA_VB[3]/2;
+// Width and height used to be expLerp'd independently. Both curves hit
+// their own endpoints correctly, but FULL_VB is wide (aspect ~1.4) and
+// TUNISIA_VB is tall (aspect ~0.46) — two very different ratios — so
+// interpolating them separately let the IN-BETWEEN aspect ratio wander
+// wherever the two independent curves happened to cross, which turned out
+// to swing through something close to square around the midpoint. That's
+// what made the country look "fat" mid-zoom: not a projection error (fixed
+// separately in build_atlas_geo.py), but the viewBox itself briefly
+// showing a squashed window. Deriving height from width and a directly-
+// interpolated aspect ratio guarantees the aspect moves monotonically
+// from FULL_VB's to TUNISIA_VB's, with no overshoot in between.
+const FULL_ASPECT = FULL_VB[2] / FULL_VB[3], TUNISIA_ASPECT = TUNISIA_VB[2] / TUNISIA_VB[3];
 
 function onScroll() {{
+  // The terminal boot screen isn't sticky — it's a normal block sitting
+  // before .scroll-spacer, so it scrolls away on its own. What it DOES
+  // need is for the map's zoom math below to ignore however many pixels
+  // of scroll it took to get past it; otherwise the zoom would already be
+  // partway done by the time the map even becomes visible.
+  const introH = terminalIntro.offsetHeight;
+  terminalIntro.style.opacity = String(Math.max(0, 1 - window.scrollY / (introH * 0.8)));
+  const effectiveScrollY = Math.max(0, window.scrollY - introH);
+
   const releaseScroll = spacer.offsetHeight - window.innerHeight;
-  const p = Math.max(0, Math.min(1, window.scrollY / (releaseScroll * 0.92)));
+  const p = Math.max(0, Math.min(1, effectiveScrollY / (releaseScroll * 0.92)));
   // Zoom now uses the entire scroll range (was p/0.75, which finished the
   // whole zoom in ~4 scroll ticks and then left 25% of the scroll as dead
   // space before the UI reveal even started). Reveal is now a short overlay
@@ -752,22 +1048,12 @@ function onScroll() {{
   const revealP = Math.max(0, Math.min(1, (p - 0.86) / 0.14));
 
   const vbW = expLerp(FULL_VB[2], TUNISIA_VB[2], zoomP);
-  const vbH = expLerp(FULL_VB[3], TUNISIA_VB[3], zoomP);
+  const vbH = vbW / expLerp(FULL_ASPECT, TUNISIA_ASPECT, zoomP);
   const cx = lerp(FULL_CX, TUNISIA_CX, zoomP);
   const cy = lerp(FULL_CY, TUNISIA_CY, zoomP);
   const vb = [cx - vbW/2, cy - vbH/2, vbW, vbH];
   svg.setAttribute('viewBox', vb.join(' '));
 
-  // The satellite photo is the establishing shot ("this is the
-  // Mediterranean, and here's Tunisia in it"). expLerp's zoom is already
-  // ~30% done by p=0.16 (equal RATIO per scroll tick, front-loaded in
-  // absolute terms) — fading the photo out that slowly left it half-
-  // transparent right as the solid-red flag layer became prominent
-  // underneath, alpha-blending into a muddy pink smear. Matching the
-  // photo's dissolve pace to the zoom's own pace (fully gone by p=0.12,
-  // vs. 0.25 before) keeps the two in the same rhythm instead of one
-  // lagging visibly behind the other.
-  heroPhoto.style.opacity = String(Math.max(0, 1 - p / 0.12));
   heroText.style.opacity = String(Math.max(0, 1 - p / 0.3));
   heroScrim.style.opacity = String(Math.max(0, 1 - p / 0.3));
   heroText.style.transform = `translateY(${{-p*40}}px)`;
@@ -775,6 +1061,7 @@ function onScroll() {{
   document.getElementById('locator').style.opacity = String(Math.max(0, 1 - p / 0.2));
 
   flagLayer.setAttribute('opacity', String(1 - revealP));
+  acquisitionHud.setAttribute('opacity', String(1 - revealP));
   dataLayer.setAttribute('opacity', String(revealP));
   countryOutline.style.opacity = String(0.3 + revealP*0.7);
 
