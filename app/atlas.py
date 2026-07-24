@@ -454,72 +454,7 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
     var(--bg);
   z-index: 1; overflow: hidden;
 }}
-.hero-scrim {{
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  /* Lighter and faster-fading than before — the old version stayed 90%+
-     opaque through the whole top half of the screen, which made the real
-     (fully-rendered) map underneath look like it wasn't there at all: a
-     hard black block up top rather than a country the viewer could see
-     they'd arrived at. The title itself has its own white/red stroke, so
-     it doesn't need a near-opaque backdrop to stay legible. */
-  background: linear-gradient(180deg, rgba(5,7,11,0.72) 0%, rgba(5,7,11,0.5) 32%, rgba(5,7,11,0.22) 55%, transparent 74%);
-  transition: opacity 200ms ease;
-}}
-.hero-text {{
-  position: absolute; top: 8vh; left: 0; right: 0; z-index: 3;
-  display: flex; flex-direction: column; align-items: center; text-align: center;
-  pointer-events: none; will-change: opacity, transform;
-}}
-.hero-eyebrow {{
-  font-family: "Orbitron HUD", monospace; font-weight: 600; font-size: 11px; letter-spacing: 0.34em;
-  text-transform: uppercase; color: var(--hud); margin-bottom: 22px; text-shadow: 0 0 8px var(--hud-dim);
-}}
-.hero-title-wrap {{ position: relative; display: inline-block; margin: 4px 0 2px; }}
-.coat {{
-  position: absolute; left: 0; bottom: 100%; margin-bottom: 10px;
-  width: 34px; height: auto;
-  filter: drop-shadow(0 0 3px var(--hud)) drop-shadow(0 0 8px var(--hud-dim));
-}}
-.hero-title-en {{
-  font-family: "Orbitron HUD", monospace; font-weight: 800;
-  font-size: clamp(64px, 13vw, 168px); letter-spacing: 0.03em; line-height: 0.9;
-  color: var(--red); -webkit-text-stroke: 1px var(--hud);
-  paint-order: stroke fill;
-  text-shadow: 0 0 14px var(--red-glow), 0 0 36px rgba(231,0,19,0.35), 0 0 3px var(--hud-dim);
-}}
-.hero-title-tag {{
-  position: absolute; right: 4px; bottom: -22px;
-  font-family: "Orbitron HUD", monospace; font-size: 14px; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--hud); opacity: 0.8; text-shadow: 0 0 6px var(--hud-dim);
-}}
-.hero-subline {{
-  display: flex; align-items: baseline; justify-content: space-between;
-  width: min(300px, 70vw); margin: 30px auto 0;
-}}
-.hero-subline .fr {{
-  font-family: "Orbitron HUD", monospace; font-size: 13px; font-weight: 600; letter-spacing: 0.16em;
-  text-transform: uppercase; color: var(--hud); text-shadow: 0 0 6px var(--hud-dim), 0 1px 3px rgba(2,3,5,0.95);
-}}
-.hero-subline .ar {{
-  font-size: 19px; font-weight: 500; color: var(--hud);
-  text-shadow: 0 0 8px var(--hud-dim), 0 1px 3px rgba(2,3,5,0.95);
-}}
-.hero-desc {{
-  max-width: 460px; margin: 26px auto 0; font-size: 12.5px; line-height: 1.7; color: var(--ink-2);
-  padding: 0 24px; font-family: Menlo, monospace;
-  /* The scrim behind the hero was lightened so the real map reads as
-     present right away instead of a black block — that means this text can
-     now sit over busier map content (the flag emblem, coastline), so each
-     line gets its own dark halo for legibility instead of relying purely on
-     the uniform background darkening. */
-  text-shadow: 0 1px 10px rgba(2,3,5,0.95), 0 1px 4px rgba(2,3,5,0.95), 0 0 20px rgba(2,3,5,0.7);
-}}
-.hero-scroll-hint {{
-  position: absolute; bottom: 6vh; left: 0; right: 0; z-index: 3; text-align: center;
-  font-family: "Orbitron HUD", monospace; font-size: 10.5px; color: var(--hud); opacity: 0.75;
-  letter-spacing: 0.22em; text-transform: uppercase; text-shadow: 0 0 5px var(--hud-dim);
-}}
-.hero-scroll-hint .chevron, .terminal-hint .chevron {{
+.terminal-hint .chevron {{
   display: block; margin: 8px auto 0; width: 9px; height: 9px;
   border-right: 1.5px solid var(--hud); border-bottom: 1.5px solid var(--hud);
   transform: rotate(45deg); animation: bob 1.8s ease-in-out infinite;
@@ -542,6 +477,48 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
     repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 48px),
     repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 48px);
 }}
+
+/* Title/coat-of-arms/subline live here now, not on the map — scrolling
+   past this screen hands off to a completely clean map with no text
+   overlaid on it. Recolored out of the flag red entirely (cyan, matching
+   every other HUD element) since this is the terminal, not the flag. */
+.terminal-title {{ display: flex; flex-direction: column; align-items: center; margin-bottom: 40px; }}
+.terminal-title .coat {{
+  width: 30px; height: auto; margin-bottom: 14px;
+  filter: drop-shadow(0 0 3px var(--hud)) drop-shadow(0 0 8px var(--hud-dim));
+}}
+.terminal-title-en {{
+  font-family: "Orbitron HUD", monospace; font-weight: 800;
+  font-size: clamp(40px, 6.5vw, 92px); letter-spacing: 0.04em; line-height: 0.95;
+  color: var(--hud); text-shadow: 0 0 10px var(--hud-dim), 0 0 28px rgba(75,232,255,0.35);
+}}
+.terminal-title-tag {{
+  font-family: "Orbitron HUD", monospace; font-size: 12.5px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--hud); opacity: 0.7; margin-top: 8px;
+}}
+.terminal-subline {{ display: flex; align-items: baseline; gap: 22px; margin-top: 16px; }}
+.terminal-subline .fr {{
+  font-family: "Orbitron HUD", monospace; font-size: 12.5px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--hud); opacity: 0.75;
+}}
+.terminal-subline .ar {{ font-size: 17px; color: var(--hud); opacity: 0.75; }}
+
+/* Ammar: a digitalized "talking mascot" next to the boot text, chomping
+   continuously like Pac-Man while the typewriter runs — a chechia (the
+   traditional Tunisian felt cap) is what makes it "Ammar" rather than a
+   generic arcade sprite. */
+.terminal-guide {{ display: flex; align-items: center; gap: 28px; }}
+.pacman {{ width: 68px; height: 75px; flex-shrink: 0; filter: drop-shadow(0 0 5px var(--hud-dim)); }}
+.pacman-head {{ fill: #ffd94a; }}
+.pacman-eye {{ fill: #241a08; }}
+.jaw {{ fill: var(--bg); transform-origin: 50px 60px; }}
+.jaw-top {{ animation: jawTop 0.6s ease-in-out infinite; }}
+.jaw-bottom {{ animation: jawBottom 0.6s ease-in-out infinite; }}
+@keyframes jawTop {{ 0%, 100% {{ transform: rotate(0deg); }} 50% {{ transform: rotate(-30deg); }} }}
+@keyframes jawBottom {{ 0%, 100% {{ transform: rotate(0deg); }} 50% {{ transform: rotate(30deg); }} }}
+.chechia {{ fill: var(--red); }}
+.chechia-tassel {{ fill: #1a1200; }}
+
 .terminal-lines {{
   font-family: "Orbitron HUD", monospace; font-size: clamp(13px, 2vw, 20px);
   color: var(--hud); letter-spacing: 0.09em; text-align: left; min-height: 4.2em;
@@ -554,7 +531,7 @@ body {{ font-family: "El Messiri", -apple-system, BlinkMacSystemFont, sans-serif
 }}
 @keyframes cursorBlink {{ 0%, 50% {{ opacity: 1; }} 51%, 100% {{ opacity: 0; }} }}
 .terminal-hint {{
-  position: absolute; bottom: 10vh; font-family: "Orbitron HUD", monospace; font-size: 11px;
+  position: absolute; bottom: 8vh; font-family: "Orbitron HUD", monospace; font-size: 11px;
   letter-spacing: 0.24em; color: var(--hud); opacity: 0; text-transform: uppercase;
   transition: opacity 600ms ease; text-align: center;
 }}
@@ -607,23 +584,46 @@ svg.atlas-map {{ width: 100%; height: 100%; }}
    red-family logic as the flag) so the governorate colors read as part
    of the instrument rather than a flat web-dashboard layer dropped on
    top of it. */
+/* #dataLayer (the group, not each path) carries the pulsing ambient
+   glow — putting the animation on individual path.region elements fought
+   with their own hover/selected filter changes (an infinite animation on
+   `filter` keeps overriding whatever a more specific selector sets), so
+   hover/selected stay static and instant while the whole choropleth
+   breathes together underneath them. */
+#dataLayer {{
+  filter: drop-shadow(0 0 3px rgba(220,120,60,0.45));
+  animation: radarGlowPulse 2.6s ease-in-out infinite;
+}}
 path.region {{
   stroke: rgba(5,7,11,0.6); stroke-width: 0.6; cursor: pointer;
-  filter: drop-shadow(0 0 2px rgba(220,120,60,0.3));
   transition: filter 120ms ease, stroke 120ms ease;
 }}
 path.region:hover {{ filter: brightness(1.35) drop-shadow(0 0 4px var(--gold)); stroke: var(--gold); stroke-width: 1; }}
 path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)); stroke: var(--gold); stroke-width: 1.4; }}
 #countryOutline {{
-  fill: none; stroke: rgba(212,169,74,0.6); stroke-width: 0.9; transition: opacity 300ms ease;
-  filter: drop-shadow(0 0 3px rgba(212,169,74,0.4));
+  fill: none; stroke: rgba(212,169,74,0.65); stroke-width: 0.9; transition: opacity 300ms ease;
+  animation: outlineGlowPulse 2.6s ease-in-out infinite;
+}}
+@keyframes radarGlowPulse {{
+  0%, 100% {{ filter: drop-shadow(0 0 3px rgba(220,120,60,0.45)); }}
+  50% {{ filter: drop-shadow(0 0 10px rgba(220,120,60,0.85)); }}
+}}
+@keyframes outlineGlowPulse {{
+  0%, 100% {{ filter: drop-shadow(0 0 3px rgba(212,169,74,0.5)); }}
+  50% {{ filter: drop-shadow(0 0 11px rgba(212,169,74,0.95)); }}
 }}
 
 /* Tunisia itself glows too (the country shape, the disc, the crescent,
    the star) — simple, low-point-count geometry, so a proper filter here
    is cheap even though it wasn't on the coastline above. Red, not cyan:
-   this is the target, not the instrument reading it. */
-#flagLayer {{ filter: drop-shadow(0 0 2px var(--red)) drop-shadow(0 0 7px var(--red-glow)); }}
+   this is the target, not the instrument reading it. Pulses continuously
+   like a radar contact, not just a static drop-shadow — that "static"
+   version was too subtle to register as "glowing" at all. */
+#flagLayer {{ animation: flagGlowPulse 2.6s ease-in-out infinite; }}
+@keyframes flagGlowPulse {{
+  0%, 100% {{ filter: drop-shadow(0 0 3px var(--red)) drop-shadow(0 0 9px var(--red-glow)); }}
+  50% {{ filter: drop-shadow(0 0 7px var(--red)) drop-shadow(0 0 22px var(--red-glow)); }}
+}}
 
 /* Acquisition HUD: crosshair + expanding rings + a rotating sweep beam,
    all centered on Tunisia and all in --hud cyan rather than the brand red
@@ -811,27 +811,30 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
 </style>
 
 <div class="terminal-intro" id="terminalIntro">
-  <div class="terminal-lines" id="terminalLines"></div>
+  <div class="terminal-title">
+    <img class="coat" src="data:image/svg+xml;base64,{coat_b64}" alt="Coat of arms of Tunisia" />
+    <div class="terminal-title-en">TUNISIA</div>
+    <div class="terminal-title-tag">in numbers</div>
+    <div class="terminal-subline">
+      <span class="fr">Tunisie</span>
+      <span class="ar">تونس</span>
+    </div>
+  </div>
+  <div class="terminal-guide">
+    <svg class="pacman" viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+      <path class="chechia" d="M 27,30 L 32,9 L 68,9 L 73,30 Q 50,21 27,30 Z"/>
+      <circle class="chechia-tassel" cx="50" cy="9" r="3"/>
+      <circle class="pacman-head" cx="50" cy="60" r="42"/>
+      <circle class="pacman-eye" cx="58" cy="34" r="5"/>
+      <polygon class="jaw jaw-top" points="50,60 94,60 94,45"/>
+      <polygon class="jaw jaw-bottom" points="50,60 94,60 94,75"/>
+    </svg>
+    <div class="terminal-lines" id="terminalLines"></div>
+  </div>
   <div class="terminal-hint" id="terminalHint">Scroll to begin<span class="chevron"></span></div>
 </div>
 <div class="scroll-spacer">
   <div class="hero" id="hero">
-    <div class="hero-text" id="heroText">
-      <div class="hero-eyebrow">Data Atlas</div>
-      <div class="hero-title-wrap">
-        <img class="coat" src="data:image/svg+xml;base64,{coat_b64}" alt="Coat of arms of Tunisia" />
-        <div class="hero-title-en">TUNISIA</div>
-        <div class="hero-title-tag">in numbers</div>
-      </div>
-      <div class="hero-subline">
-        <span class="fr">Tunisie</span>
-        <span class="ar">تونس</span>
-      </div>
-      <p class="hero-desc">
-        Population, economy, and health, mapped by governorate — built on real data pulled
-        from Tunisia's National Institute of Statistics and rendered as a live, explorable atlas.
-      </p>
-    </div>
     <div class="map-canvas-wrap">
       <svg class="atlas-map" id="atlasSvg" viewBox="{FULL_VIEWBOX[0]} {FULL_VIEWBOX[1]} {FULL_VIEWBOX[2]} {FULL_VIEWBOX[3]}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -886,8 +889,6 @@ path.region.selected {{ filter: brightness(1.15) drop-shadow(0 0 5px var(--gold)
       </svg>
       <div class="locator-label">Tunisia in Africa</div>
     </div>
-    <div class="hero-scrim" id="heroScrim"></div>
-    <div class="hero-scroll-hint" id="scrollHint"><span>Scroll to explore</span><span class="chevron"></span></div>
   </div>
 </div>
 
@@ -945,16 +946,17 @@ const PAYLOAD = {json.dumps(PAYLOAD, ensure_ascii=False)};
 const FULL_VB = {json.dumps(FULL_VIEWBOX)};
 const TUNISIA_VB = {json.dumps(TUNISIA_VIEWBOX)};
 
-// Boot-sequence typewriter: types a short log into the dark, mapless
-// first screen, then reveals a scroll hint. Runs once on load, entirely
-// independent of the scroll-driven zoom below.
+// Boot-sequence typewriter: Ammar (the chomping mascot) "speaks" this
+// into the dark, mapless first screen, then reveals a scroll hint. Runs
+// once on load, entirely independent of the scroll-driven zoom below.
 const terminalIntro = document.getElementById('terminalIntro');
 const terminalLines = document.getElementById('terminalLines');
 const terminalHint = document.getElementById('terminalHint');
 const BOOT_LINES = [
-  'TUNISIA DATA ATLAS',
-  'ESTABLISHING SATELLITE LINK...',
-  'TARGET ACQUIRED — TUNISIA',
+  "HI, I'M AMMAR.",
+  "I'LL BE YOUR GUIDE THROUGH TUNISIA'S DATA ATLAS —",
+  'POPULATION, ECONOMY, AND HEALTH, BY GOVERNORATE.',
+  "LET'S TAKE A LOOK.",
 ];
 (function typeBootSequence() {{
   let li = 0, ci = 0;
@@ -984,9 +986,6 @@ const BOOT_LINES = [
 }})();
 
 const spacer = document.querySelector('.scroll-spacer');
-const heroText = document.getElementById('heroText');
-const heroScrim = document.getElementById('heroScrim');
-const scrollHint = document.getElementById('scrollHint');
 const svg = document.getElementById('atlasSvg');
 const flagLayer = document.getElementById('flagLayer');
 const acquisitionHud = document.getElementById('acquisitionHud');
@@ -1054,10 +1053,6 @@ function onScroll() {{
   const vb = [cx - vbW/2, cy - vbH/2, vbW, vbH];
   svg.setAttribute('viewBox', vb.join(' '));
 
-  heroText.style.opacity = String(Math.max(0, 1 - p / 0.3));
-  heroScrim.style.opacity = String(Math.max(0, 1 - p / 0.3));
-  heroText.style.transform = `translateY(${{-p*40}}px)`;
-  scrollHint.style.opacity = String(Math.max(0, 1 - p / 0.15));
   document.getElementById('locator').style.opacity = String(Math.max(0, 1 - p / 0.2));
 
   flagLayer.setAttribute('opacity', String(1 - revealP));
