@@ -14,8 +14,9 @@ import pandas as pd
 import yaml
 
 from tn_dashboard import config
+from tn_dashboard.etl import db
 from tn_dashboard.ins_api import catalog
-from tn_dashboard.ins_api.client import get_data
+from tn_dashboard.ins_api.client import InsApiError, get_data
 
 logger = logging.getLogger(__name__)
 
@@ -43,17 +44,37 @@ def load_indicator_config() -> list[dict]:
         return yaml.safe_load(f)
 
 
-def fetch_api_indicators(region_lookup: dict[str, dict]) -> pd.DataFrame:
+def fetch_api_indicators(
+    region_lookup: dict[str, dict], only_slugs: set[str] | None = None
+) -> tuple[pd.DataFrame, list[str]]:
+    """Pulls every indicator in config/indicators.yaml from the live API, or
+    just ``only_slugs`` when given — useful when adding a handful of new
+    indicators to an already-built database, since a full 62-indicator sweep
+    against this portal can take well over an hour if it's having a slow day
+    (every request re-hits every indicator, including ones that haven't
+    changed), whereas the new subset alone takes a couple of minutes."""
     entries = load_indicator_config()
+    if only_slugs is not None:
+        entries = [e for e in entries if e["slug"] in only_slugs]
     rows = []
 
+    failed_slugs = []
     for i, entry in enumerate(entries, start=1):
-        points = get_data(
-            source_id=entry["source_id"],
-            indicator_keys=[entry["indicator_key"]],
-            period_from=PERIOD_FROM,
-            period_to=PERIOD_TO,
-        )
+        try:
+            points = get_data(
+                source_id=entry["source_id"],
+                indicator_keys=[entry["indicator_key"]],
+                period_from=PERIOD_FROM,
+                period_to=PERIOD_TO,
+            )
+        except InsApiError as exc:
+            # The live portal is occasionally flaky on a single indicator
+            # (read timeouts) even after the client's own retries — one bad
+            # indicator shouldn't discard everything else already fetched in
+            # this run. Re-running the ETL later picks up anything skipped.
+            logger.warning("skipping %s after repeated failures: %s", entry["slug"], exc)
+            failed_slugs.append(entry["slug"])
+            continue
         for p in points:
             if p.value is None:
                 continue
@@ -79,7 +100,12 @@ def fetch_api_indicators(region_lookup: dict[str, dict]) -> pd.DataFrame:
         time.sleep(REQUEST_DELAY_SECONDS)
 
     logger.info("Fetched %d data points across %d indicators", len(rows), len(entries))
-    return pd.DataFrame(rows)
+    if failed_slugs:
+        logger.warning(
+            "%d indicator(s) skipped this run, re-run the ETL to retry: %s",
+            len(failed_slugs), ", ".join(failed_slugs),
+        )
+    return pd.DataFrame(rows), failed_slugs
 
 
 def load_legacy_poverty_dataset() -> pd.DataFrame:
@@ -111,12 +137,44 @@ def load_legacy_poverty_dataset() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def build() -> pd.DataFrame:
+def build(only_slugs: set[str] | None = None) -> pd.DataFrame:
+    """Builds the full tidy dataset. If any indicator fails to fetch this
+    run (the live portal is flaky — read timeouts on an otherwise-healthy
+    indicator are common), its rows are backfilled from whatever is already
+    in data/tunisia.duckdb rather than silently regressing that indicator to
+    empty. The full-refresh write in db.replace_indicators() means a bad run
+    would otherwise permanently lose an indicator that fetched fine before.
+
+    Pass ``only_slugs`` to fetch just those from the live API (e.g. a
+    handful of newly-added indicators) and backfill every other configured
+    indicator from the existing database untouched — a full 62-indicator
+    sweep can take well over an hour if the portal is having a slow day,
+    when all you actually need is the couple you just added.
+    """
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     region_lookup = catalog.load_region_lookup()
 
-    api_df = fetch_api_indicators(region_lookup)
+    api_df, failed_slugs = fetch_api_indicators(region_lookup, only_slugs=only_slugs)
     legacy_df = load_legacy_poverty_dataset()
+
+    slugs_to_backfill = set(failed_slugs)
+    if only_slugs is not None:
+        all_slugs = {e["slug"] for e in load_indicator_config()}
+        slugs_to_backfill |= all_slugs - set(only_slugs)
+
+    if slugs_to_backfill and config.DUCKDB_PATH.exists():
+        con = db.connect()
+        try:
+            existing = db.load_indicators(con)
+        finally:
+            con.close()
+        backfill = existing[existing["slug"].isin(slugs_to_backfill)]
+        if not backfill.empty:
+            logger.warning(
+                "backfilling %d row(s) for %d indicator(s) from the existing db (not re-fetched)",
+                len(backfill), backfill["slug"].nunique(),
+            )
+            api_df = pd.concat([api_df, backfill], ignore_index=True)
 
     combined = pd.concat([api_df, legacy_df], ignore_index=True)
     combined["region_key"] = combined["region_key"].astype("string")

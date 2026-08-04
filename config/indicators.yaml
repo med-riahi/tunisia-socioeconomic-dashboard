@@ -389,3 +389,123 @@
   theme: Santé
   name: "Taux de prévalence contraceptive"
   unit: "Pourcentage"
+
+# Added from the original Phase 2 scoring pass (data/interim/indicator_scores.csv)
+# — these 14 were already discovered and scored as governorate-level, real,
+# complete indicators back then but weren't part of the original approved
+# shortlist. Picked here for being clean, standalone, headline-worthy counts;
+# deliberately left out marriage-by-age-bracket and birth-place breakdowns
+# (Population > Mariages/Naissance) since those are partial cross-tab slices
+# of a categorical split (day/night pharmacy licensing, "undeclared" residual
+# buckets, single age brackets) rather than clean indicators on their own.
+- slug: primary_classrooms_count
+  source_id: C_NSO
+  indicator_key: "22242716"
+  theme_group: education_health
+  theme: Education
+  name: "Nombre de locaux-classes (cycle primaire public)"
+  unit: "Nombre"
+
+- slug: secondary_classrooms_count
+  source_id: C_NSO
+  indicator_key: "22243316"
+  theme_group: education_health
+  theme: Education
+  name: "Nombre de locaux-classes (cycle secondaire public)"
+  unit: "Nombre"
+
+- slug: deaths_total_corrected
+  source_id: C_NSO
+  indicator_key: "22270516"
+  theme_group: population
+  theme: Population
+  name: "Décès corrigés"
+  unit: "Nombre"
+
+- slug: regional_hospitals_count
+  source_id: C_NSO
+  indicator_key: "22301416"
+  theme_group: education_health
+  theme: Santé
+  name: "Hôpitaux régionaux"
+  unit: "Nombre"
+
+- slug: district_hospitals_count
+  source_id: C_NSO
+  indicator_key: "22301516"
+  theme_group: education_health
+  theme: Santé
+  name: "Hôpitaux de circonscription"
+  unit: "Nombre"
+
+- slug: nurses_count
+  source_id: C_NSO
+  indicator_key: "22302616"
+  theme_group: education_health
+  theme: Santé
+  name: "Infirmiers"
+  unit: "Nombre"
+
+- slug: specialized_institutes_count
+  source_id: C_NSO
+  indicator_key: "22301316"
+  theme_group: education_health
+  theme: Santé
+  name: "Instituts, centres et hôpitaux spécialisés"
+  unit: "Nombre"
+
+- slug: private_practice_offices_count
+  source_id: C_NSO
+  indicator_key: "22301716"
+  theme_group: education_health
+  theme: Santé
+  name: "Cabinets de libre pratique"
+  unit: "Nombre"
+
+- slug: public_doctors_count
+  source_id: C_NSO
+  indicator_key: "22302316"
+  theme_group: education_health
+  theme: Santé
+  name: "Médecins de la santé publique"
+  unit: "Nombre"
+
+- slug: private_doctors_count
+  source_id: C_NSO
+  indicator_key: "22302416"
+  theme_group: education_health
+  theme: Santé
+  name: "Médecins de libre pratique"
+  unit: "Nombre"
+
+- slug: dental_clinics_count
+  source_id: C_NSO
+  indicator_key: "22301916"
+  theme_group: education_health
+  theme: Santé
+  name: "Cabinets dentaires"
+  unit: "Nombre"
+
+- slug: reproductive_health_acts
+  source_id: C_NSO
+  indicator_key: "22302716"
+  theme_group: education_health
+  theme: Santé
+  name: "Actes de santé de la reproduction"
+  unit: "Nombre"
+
+- slug: postnatal_care_acts
+  source_id: C_NSO
+  indicator_key: "22302816"
+  theme_group: education_health
+  theme: Santé
+  name: "Actes postnatal"
+  unit: "Nombre"
+
+- slug: prenatal_care_acts
+  source_id: C_NSO
+  indicator_key: "22302916"
+  theme_group: education_health
+  theme: Santé
+  name: "Actes prénatal"
+  unit: "Nombre"
